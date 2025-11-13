@@ -5,9 +5,24 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\AuthController;
 
-Route::controller(HomeController::class)->group(function () {
-    Route::get('/', 'index')->name('index');
+// Public site home route (named 'home' for consistent reference)
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Authentication routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Legacy backoffice routes (kept while migrating to Filament). Path changed to avoid conflict with Filament '/admin'.
+Route::middleware('auth')->prefix('backoffice')->name('admin.')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('categories', CategoryController::class);
+    Route::resource('products', ProductController::class);
 });
 
     // demos
@@ -31,7 +46,7 @@ Route::prefix('home')->group(function () {
         Route::get('/simple-products','simpleProducts')->name('simpleProducts');
         Route::get('/thank-you','thankYou')->name('thankYou');
         Route::get('/wishlist','wishlist')->name('wishlist');
-        Route::get('/login','login')->name('login');
+    Route::get('/login','login')->name('home.login');
     });
 });
 
