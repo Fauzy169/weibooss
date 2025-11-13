@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 
@@ -15,9 +16,10 @@ class ProductForm
     {
         return $schema
             ->components([
-                Select::make('category_id')
-                    ->label('Category')
-                    ->relationship('category', 'name')
+                Select::make('categories')
+                    ->label('Categories')
+                    ->relationship('categories', 'name')
+                    ->multiple()
                     ->searchable()
                     ->preload()
                     ->required(),

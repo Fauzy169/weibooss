@@ -26,8 +26,6 @@ class ServicesTable
                     ->money()
                     ->sortable(),
                 ImageColumn::make('image'),
-                IconColumn::make('is_featured')
-                    ->boolean(),
                 IconColumn::make('active')
                     ->boolean(),
                 TextColumn::make('created_at')

@@ -36,8 +36,6 @@ class ServiceForm
                     ->directory('services')
                     ->visibility('public')
                     ->imageEditor(),
-                Toggle::make('is_featured')
-                    ->required(),
                 Toggle::make('active')
                     ->required(),
             ]);

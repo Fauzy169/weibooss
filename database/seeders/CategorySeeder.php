@@ -13,6 +13,17 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory(5)->create();
+        // Seed curated categories only (no factories)
+        $presets = [
+            ['name' => 'Baju Pengantin', 'slug' => 'baju-pengantin', 'image' => null],
+            ['name' => 'Aksesoris', 'slug' => 'aksesoris', 'image' => null],
+        ];
+
+        foreach ($presets as $preset) {
+            Category::updateOrCreate(
+                ['slug' => $preset['slug']],
+                ['name' => $preset['name'], 'image' => $preset['image']]
+            );
+        }
     }
 }

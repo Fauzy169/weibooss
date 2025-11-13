@@ -14,12 +14,29 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Load categories and a small set of featured products for the homepage
-        $categories = Category::withCount('products')->orderBy('name')->get();
-        $featuredProducts = Product::latest()->take(8)->get();
-    $photoServices = Service::where('type', 'photo')->where('active', true)->get();
-    $featuredServices = Service::where('is_featured', true)->where('active', true)->get();
-    $promotion = Promotion::where('active', true)->latest('deadline_at')->first();
+        // Load categories and counts for the homepage
+        // Count products via many-to-many pivot so badges reflect all assignments
+        $categories = Category::withCount(['productsMany as products_count'])->orderBy('name')->get();
+
+        // Section: Baju Pengantin → products under category "Baju Pengantin"
+        $bajuPengantinCategory = Category::where('slug', 'baju-pengantin')
+            ->orWhere('name', 'Baju Pengantin')
+            ->first();
+        $weddingProducts = $bajuPengantinCategory
+            ? Product::whereHas('categories', fn($q) => $q->where('categories.id', $bajuPengantinCategory->id))->latest()->get()
+            : collect();
+
+        // Section: Aksesoris → products under category "Aksesoris"
+        $aksesorisCategory = Category::where('slug', 'aksesoris')
+            ->orWhere('name', 'Aksesoris')
+            ->first();
+        $accessoryProducts = $aksesorisCategory
+            ? Product::whereHas('categories', fn($q) => $q->where('categories.id', $aksesorisCategory->id))->latest()->get()
+            : collect();
+
+        // Services area: show active services (no featured flag needed)
+        $featuredServices = Service::where('active', true)->latest()->get();
+        $promotion = Promotion::where('active', true)->latest('deadline_at')->first();
         $brands = Brand::where('active', true)->orderBy('name')->get();
         // Fetch all active banners for the home hero position so the slider reflects the exact count
         $banners = Banner::where('active', true)
@@ -27,7 +44,15 @@ class HomeController extends Controller
             ->latest('updated_at')
             ->get();
 
-        return view('home/index', compact('categories', 'featuredProducts', 'photoServices', 'featuredServices', 'promotion', 'brands', 'banners'));
+        return view('home/index', compact(
+            'categories',
+            'weddingProducts',
+            'accessoryProducts',
+            'featuredServices',
+            'promotion',
+            'brands',
+            'banners'
+        ));
     }
     
     public function indexTwo()

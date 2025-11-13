@@ -20,6 +20,11 @@ class Category extends Model
         return $this->hasMany(Product::class);
     }
 
+    public function productsMany()
+    {
+        return $this->belongsToMany(Product::class, 'category_product');
+    }
+
     public function getImageUrlAttribute(): string
     {
         if (!$this->image) {

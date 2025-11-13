@@ -47,8 +47,6 @@ class ServiceSeeder extends Seeder
                 ]
             );
         }
-
-        // Some random non-featured services for variety
-        Service::factory()->count(5)->create();
+        // No factories; curated services only
     }
 }

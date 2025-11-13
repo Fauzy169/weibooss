@@ -32,6 +32,13 @@ class ProductResource extends Resource
         return ProductsTable::configure($table);
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        // Hide generic "Products" from the admin menu; replaced by
+        // specialized menus: Baju Pengantin & Aksesoris
+        return false;
+    }
+
     public static function getRelations(): array
     {
         return [

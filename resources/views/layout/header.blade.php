@@ -36,9 +36,9 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a class="menu-item" href="#produk-rekomendasi">Produk Rekomendasi</a></li>
+                                <li><a class="menu-item" href="#produk-rekomendasi">Baju Pengantin</a></li>
                                 <li><a class="menu-item" href="#promo">Promo</a></li>
-                                <li><a class="menu-item" href="#jasa-foto">Jasa Foto</a></li>
+                                <li><a class="menu-item" href="#aksesoris">Aksesoris</a></li>
                                 <li><a class="menu-item" href="{{ route('contact') }}">Contact</a></li>
                             </ul>
                         </nav>

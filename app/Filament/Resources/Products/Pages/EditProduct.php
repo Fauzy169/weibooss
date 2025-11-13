@@ -16,4 +16,14 @@ class EditProduct extends EditRecord
             DeleteAction::make(),
         ];
     }
+    
+        protected function afterSave(): void
+        {
+            // Keep primary category_id synced with first selected category
+            $firstCategoryId = optional($this->record->categories()->first())->id;
+            if ($firstCategoryId && $this->record->category_id !== $firstCategoryId) {
+                $this->record->category_id = $firstCategoryId;
+                $this->record->save();
+            }
+        }
 }
