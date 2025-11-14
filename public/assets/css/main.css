@@ -19308,7 +19308,7 @@ tr:first-child {
   transform: translateY(-3px);
 }
 .rts-product-details-section .details-product-area .product-price {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   font-size: 36px;
   color: #EE403D;
 }
@@ -20855,7 +20855,6 @@ tr:first-child {
 }
 
 .rts-shop-section {
-  margin-top: 50px;
   margin-bottom: 50px;
   padding: 50px 0 110px;
 }
@@ -21124,6 +21123,7 @@ tr:first-child {
   font-size: 14px;
   margin-right: 7px;
 }
+
 .product-pagination-area button.active, .product-pagination-area button:hover {
   background: #EE403D;
   color: #fff;
@@ -21136,10 +21136,6 @@ tr:first-child {
   .products-area3 .product-item2 .product-image img {
     width: 100%;
   }
-}
-
-.rts-account-section {
-  padding-bottom: 120px;
 }
 
 .account-inner {

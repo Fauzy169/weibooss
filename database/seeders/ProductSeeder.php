@@ -39,7 +39,7 @@ class ProductSeeder extends Seeder
         ];
 
         // Helper to create product and attach categories
-        $createProduct = function(array $row, Category $primary, array $also = []) {
+        $createProduct = function(array $row, Category $primary, array $also = [], array $gallery = []) {
             $slug = Str::slug($row['name']);
             $product = Product::updateOrCreate(
                 ['slug' => $slug],
@@ -49,18 +49,37 @@ class ProductSeeder extends Seeder
                     'description' => $row['description'] ?? null,
                     'price' => $row['price'],
                     'image' => $row['image'] ?? null,
+                    'gallery' => $gallery ?: null,
                 ]
             );
             $categoryIds = array_unique(array_merge([$primary->id], array_map(fn($c)=>$c->id, $also)));
             $product->categories()->sync($categoryIds);
         };
 
-        foreach ($bajuItems as $it) {
-            $createProduct($it, $baju);
+        $bajuGalleries = [
+            ['assets/images/products/home3/1.jpg','assets/images/products/home3/2.jpg'],
+            ['assets/images/products/home3/3.jpg'],
+            ['assets/images/products/home3/4.jpg','assets/images/products/home3/5.jpg','assets/images/products/home3/6.jpg'],
+            ['assets/images/products/home3/7.jpg'],
+        ];
+
+        foreach ($bajuItems as $i => $it) {
+            $also = ($i % 2 === 0) ? [$aks] : [];
+            $gallery = $bajuGalleries[$i] ?? [];
+            $createProduct($it, $baju, $also, $gallery);
         }
 
-        foreach ($aksItems as $it) {
-            $createProduct($it, $aks);
+        $aksGalleries = [
+            ['assets/images/products/home3/8.jpg','assets/images/products/home3/9.jpg'],
+            ['assets/images/products/home3/10.jpg'],
+            ['assets/images/products/home3/11.jpg','assets/images/products/home3/12.jpg'],
+            ['assets/images/products/home3/13.jpg'],
+        ];
+
+        foreach ($aksItems as $i => $it) {
+            $also = ($i % 2 === 0) ? [$baju] : [];
+            $gallery = $aksGalleries[$i] ?? [];
+            $createProduct($it, $aks, $also, $gallery);
         }
     }
 }

@@ -2,12 +2,12 @@
 
 @php
     $css='<link rel="stylesheet" href="' . asset('assets/css/jquery.nstSlider.min.css') . '"/>
-          <link rel="stylesheet" href="' . asset('assets/css/variables/variable6.css') . '"/>';     
-    $title='Catagory';
+        <link rel="stylesheet" href="' . asset('assets/css/variables/variable6.css') . '"/>';     
+    $title = isset($category) ? $category->name : 'Category';
     $subTitle = 'Home';
-    $subTitle2 = 'Catagory';
+    $subTitle2 = isset($category) ? $category->name : 'Category';
     $script = '<script src="' . asset('assets/js/vendors/jquery.nstSlider.min.js') . '"></script>
-               <script src="' . asset('assets/js/vendors/zoom.js') . '"></script>'; 
+           <script src="' . asset('assets/js/vendors/zoom.js') . '"></script>'; 
 @endphp
 
 @section('content')
@@ -16,596 +16,98 @@
     <div class="rts-shop-section section-gap">
         <div class="container">
             <div class="row">
-                <div class="col-xl-9">
-                    <div class="shop-product-topbar">
-                        <span class="items-onlist">Showing 1-12 of 70 results</span>
+                <div class="col-xl-9 col-lg-8">
+                    @isset($category)
+                        <div class="mb-3">
+                            <h2 class="section-title mb-0">Category: {{ $category->name }}</h2>
+                        </div>
+                    @endisset
+                    <div class="shop-product-topbar d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        @isset($products)
+                            <span class="items-onlist">Showing {{ $products->firstItem() ?? 0 }}-{{ $products->lastItem() ?? 0 }} of {{ $products->total() ?? 0 }} results</span>
+                        @else
+                            <span class="items-onlist">Showing 0 results</span>
+                        @endisset
                         <div class="filter-area">
-                            <p class="select-area">
-                                <select class="select">
-                                    <option value="*">Sort by average rating</option>
-                                    <option value=".popular">Sort by popularity</option>
-                                    <option value=".best-rate">Sort by latest</option>
-                                    <option value=".on-sale">Sort by price: low to high</option>
-                                    <option value=".featured">Sort by price: high to low</option>
-                                </select>
-                            </p>
+                            <form method="GET" id="sortForm">
+                                <input type="hidden" name="slug" value="{{ $category->slug ?? '' }}" />
+                                @if(request('with'))
+                                    <input type="hidden" name="with" value="{{ request('with') }}" />
+                                @endif
+                                <p class="select-area mb-0">
+                                    <select class="select" name="sort" onchange="this.form.submit()">
+                                        @php($currentSort = request('sort', $sort ?? 'latest'))
+                                        <option value="latest" {{ $currentSort==='latest' ? 'selected' : '' }}>Sort by latest</option>
+                                        <option value="price_asc" {{ $currentSort==='price_asc' ? 'selected' : '' }}>Sort by price: low to high</option>
+                                        <option value="price_desc" {{ $currentSort==='price_desc' ? 'selected' : '' }}>Sort by price: high to low</option>
+                                        <option value="name_asc" {{ $currentSort==='name_asc' ? 'selected' : '' }}>Sort by name: A-Z</option>
+                                        <option value="name_desc" {{ $currentSort==='name_desc' ? 'selected' : '' }}>Sort by name: Z-A</option>
+                                    </select>
+                                </p>
+                            </form>
                         </div>
                     </div>
                     <div class="products-area products-area3">
-                        <div class="row justify-content-center">
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item3">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/1.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item2">
-                                    <a href="{{ route('productDetails') }}"
-                                        class="product-image image-slider-variations image-slider-variations3">
-                                        <div class="swiper productSlide">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari1 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/2.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
+                        <div class="row g-3 g-md-4">
+                            @isset($products)
+                                @forelse($products as $product)
+                                    <div class="col-6 col-md-4 col-lg-3">
+                                        <div class="product-item product-item2 element-item1">
+                                            <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-image">
+                                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}" onerror="this.onerror=null;this.src='{{ asset('assets/images/products/product-details.jpg') }}';">
+                                            </a>
+                                            <div class="bottom-content">
+                                                <span class="product-category">{{ $category->name ?? 'Produk' }}</span>
+                                                <div>
+                                                    <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-name">{{ $product->name }}</a>
                                                 </div>
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari2 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/7.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="slider-buttons">
-                                            <div class="button-prev slider-btn"><i class="fal fa-long-arrow-left"></i>
-                                            </div>
-                                            <div class="button-next slider-btn"><i class="fal fa-long-arrow-right"></i>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item3 popular">
-                                    <a href="{{ route('productDetails') }}"
-                                        class="product-image image-gallery-variations image-gallery-variations3">
-                                        <div class="swiper productGallerySlide">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari1 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/3.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari2 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/9.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <div class="thumbs-area">
-                                        <div class="swiper productGallerySlideThumb">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari1 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/3.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <div class="image-vari2 image-vari"><img
-                                                            src="{{ asset('assets/images/products/home3/9.jpg') }}"
-                                                            alt="product-image">
-                                                    </div>
+                                                <div class="action-wrap">
+                                                    <span class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+                                                    <a href="#" class="addto-cart"><i class="fal fa-shopping-cart"></i>
+                                                        Add To
+                                                        Cart</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/4.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/5.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/6.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/7.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/8.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/9.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/10.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/1.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/2.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/3.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/4.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/5.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/6.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/7.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/8.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/9.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-md-4 col-sm-6">
-                                <div class="product-item product-item2 element-item1">
-                                    <a href="{{ route('productDetails') }}" class="product-image">
-                                        <img src="{{ asset('assets/images/products/home3/10.jpg') }}" alt="product-image">
-                                    </a>
-                                    <div class="bottom-content">
-                                        <span class="product-category">Hand Craft</span>
-                                        <a href="{{ route('productDetails') }}" class="product-name">Minimalist Beard Mug</a>
-                                        <div class="action-wrap">
-                                            <span class="product-price">$31.00</span>
-                                            <a href="cart.php" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                Add To
-                                                Cart</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                                @empty
+                                    <div class="col-12"><div class="text-center p-5">Belum ada produk pada kategori ini.</div></div>
+                                @endforelse
+                            @endisset
                         </div>
                     </div>
-                    <div class="product-pagination-area mt--20">
-                        <button class="prev"><i class="far fa-long-arrow-left"></i></button>
-                        <button class="number active">01</button>
-                        <button class="number">02</button>
-                        <button class="skip-number">---</button>
-                        <button class="number">07</button>
-                        <button class="number">08</button>
-                        <button class="next"><i class="far fa-long-arrow-right"></i></button>
-                    </div>
+                    @isset($products)
+                        <div class="product-pagination-area mt--20">
+                            {!! $products->withQueryString()->links() !!}
+                        </div>
+                    @endisset
                 </div>
-                <div class="col-xl-3">
+                <div class="col-xl-3 col-lg-4">
                     <div class="side-sticky">
                         <div class="shop-side-action">
                             <div class="action-item">
                                 <div class="action-top">
                                     <span class="action-title">category</span>
                                 </div>
-                                <div class="category-item">
-                                    <div class="category-item-inner">
-                                        <div class="category-title-area">
-                                            <span class="point"></span>
-                                            <span class="category-title">Kids (10)</span>
-                                        </div>
-                                        <div class="down-icon"><i class="far fa-angle-down"></i></div>
+                                <ul class="sub-categorys">
+                                    <div class="sub-categorys-inner">
+                                        @isset($category)
+                                            <li>
+                                                <span class="point"></span>
+                                                <a href="{{ route('category', ['slug' => $category->slug, 'sort' => request('sort')]) }}" class="{{ request('with') ? '' : 'active' }}">Semua</a>
+                                            </li>
+                                            @isset($otherCategories)
+                                                @foreach($otherCategories as $oc)
+                                                    <li>
+                                                        <span class="point"></span>
+                                                        <a href="{{ route('category', ['slug' => $category->slug, 'with' => $oc->slug, 'sort' => request('sort')]) }}" class="{{ (isset($withCategory) && $withCategory && $withCategory->id === $oc->id) ? 'active' : '' }}">{{ $oc->name }} ({{ $oc->products_count }})</a>
+                                                    </li>
+                                                @endforeach
+                                            @endisset
+                                        @endisset
                                     </div>
-                                    <ul class="sub-categorys">
-                                        <div class="sub-categorys-inner">
-                                            <li><span class="point"></span><a href="shop.php">Clothes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Shoes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Toys</a></li>
-                                        </div>
-                                    </ul>
-                                </div>
-                                <div class="category-item">
-                                    <div class="category-item-inner">
-                                        <div class="category-title-area">
-                                            <span class="point"></span>
-                                            <span class="category-title">Mens (23)</span>
-                                        </div>
-                                        <div class="down-icon"><i class="far fa-angle-down"></i></div>
-                                    </div>
-                                    <ul class="sub-categorys">
-                                        <div class="sub-categorys-inner">
-                                            <li><span class="point"></span><a href="shop.php">Clothes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Shoes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Glasses</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Watches</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Assesories</a></li>
-                                        </div>
-                                    </ul>
-                                </div>
-                                <div class="category-item">
-                                    <div class="category-item-inner">
-                                        <div class="category-title-area">
-                                            <span class="point"></span>
-                                            <span class="category-title">Women (14)</span>
-                                        </div>
-                                        <div class="down-icon"><i class="far fa-angle-down"></i></div>
-                                    </div>
-                                    <ul class="sub-categorys">
-                                        <div class="sub-categorys-inner">
-                                            <li><span class="point"></span><a href="shop.php">Clothes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Shoes</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Glasses</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Makeups</a></li>
-                                            <li><span class="point"></span><a href="shop.php">Assesories</a></li>
-                                        </div>
-                                    </ul>
-                                </div>
+                                </ul>
                             </div>
-                            <div class="action-item">
-                                <div class="action-top">
-                                    <span class="action-title">Filter</span>
-                                </div>
-                                <div class="nstSlider" data-range_min="50" data-range_max="20000" data-cur_min="20"
-                                    data-cur_max="10000">
-
-                                    <div class="bar"></div>
-                                    <div class="leftGrip price-range-grip"></div>
-                                    <div class="rightGrip price-range-grip"></div>
-                                </div>
-                                <div class="range-label-area">
-                                    <div class="min-price d-flex">
-                                        <span class="range-lbl">Min:</span>
-                                        <span class="currency-symbol">$</span>
-                                        <div class="leftLabel price-range-label"></div>
-                                    </div>
-                                    <div class="min-price d-flex">
-                                        <span class="range-lbl">Max:</span>
-                                        <span class="currency-symbol">$</span>
-                                        <div class="rightLabel price-range-label"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-top">
-                                    <span class="action-title">Color</span>
-                                </div>
-                                <div class="color-item">
-                                    <div class="color black"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">Black</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                                <div class="color-item">
-                                    <div class="color blue"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">blue</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                                <div class="color-item selected">
-                                    <div class="color gray"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">Gray</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                                <div class="color-item">
-                                    <div class="color green"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">Green</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                                <div class="color-item">
-                                    <div class="color red"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">Red</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                                <div class="color-item">
-                                    <div class="color yellow"><i class="fas fa-check"></i></div>
-                                    <span class="color-name">Yellow</span>
-                                    <div class="color-arrow"><i class="far fa-long-arrow-right"></i></div>
-                                </div>
-                            </div>
-                            <div class="action-item">
-                                <div class="action-top">
-                                    <span class="action-title">Brand</span>
-                                </div>
-                                <div class="product-brands">
-                                    <div class="brands-inner">
-                                        <ul>
-                                            <li><a class="product-brand" href="shop.php">Alexander McQueen</a></li>
-                                            <li><a class="product-brand" href="shop.php">Adidas</a></li>
-                                            <li><a class="product-brand" href="shop.php">Balenciaga</a></li>
-                                            <li><a class="product-brand" href="shop.php">Balmain</a></li>
-                                            <li><a class="product-brand" href="shop.php">Burberry</a></li>
-                                            <li><a class="product-brand" href="shop.php">Chloé</a></li>
-                                            <li><a class="product-brand" href="shop.php">Dsquared2</a></li>
-                                            <li><a class="product-brand" href="shop.php">Givenchy</a></li>
-                                            <li><a class="product-brand" href="shop.php">Kenzo</a></li>
-                                            <li><a class="product-brand" href="shop.php">Leo</a></li>
-                                            <li><a class="product-brand" href="shop.php">Maison Margiela</a></li>
-                                            <li><a class="product-brand" href="shop.php">Moschino</a></li>
-                                            <li><a class="product-brand" href="shop.php">Nike</a></li>
-                                            <li><a class="product-brand" href="shop.php">Versace</a></li>
-                                            <li><a class="product-brand" href="shop.php">Alexander McQueen</a></li>
-                                            <li><a class="product-brand" href="shop.php">Adidas</a></li>
-                                            <li><a class="product-brand" href="shop.php">Balenciaga</a></li>
-                                            <li><a class="product-brand" href="shop.php">Balmain</a></li>
-                                            <li><a class="product-brand" href="shop.php">Burberry</a></li>
-                                            <li><a class="product-brand" href="shop.php">Chloé</a></li>
-                                            <li><a class="product-brand" href="shop.php">Dsquared2</a></li>
-                                            <li><a class="product-brand" href="shop.php">Givenchy</a></li>
-                                            <li><a class="product-brand" href="shop.php">Kenzo</a></li>
-                                            <li><a class="product-brand" href="shop.php">Leo</a></li>
-                                            <li><a class="product-brand" href="shop.php">Maison Margiela</a></li>
-                                            <li><a class="product-brand" href="shop.php">Moschino</a></li>
-                                            <li><a class="product-brand" href="shop.php">Nike</a></li>
-                                            <li><a class="product-brand" href="shop.php">Versace</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="shop.php" class="banner-item">
-                                <div class="banner-inner">
-                                    <span class="pretitle">Winter Fashion</span>
-                                    <h1 class="title">Behind the
-                                        deseart</dih1v>
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>

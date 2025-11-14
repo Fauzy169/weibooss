@@ -27,7 +27,8 @@ class AksesorisResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return ProductForm::configure($schema);
+        $id = static::categoryId();
+        return ProductForm::configure($schema, $id, 'Aksesoris');
     }
 
     public static function table(Table $table): Table
@@ -39,7 +40,8 @@ class AksesorisResource extends Resource
     {
         $query = parent::getEloquentQuery();
         $id = static::categoryId();
-        return $id ? $query->whereHas('categories', fn($q) => $q->where('categories.id', $id)) : $query;
+        // Only show products whose PRIMARY category matches this resource.
+        return $id ? $query->where('category_id', $id) : $query;
     }
 
     protected static function categoryId(): ?int

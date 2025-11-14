@@ -27,8 +27,8 @@ class BajuPengantinResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        // Reuse generic product form; category will be forced in page classes
-        return ProductForm::configure($schema);
+        $id = static::categoryId();
+        return ProductForm::configure($schema, $id, 'Baju Pengantin');
     }
 
     public static function table(Table $table): Table
@@ -40,7 +40,8 @@ class BajuPengantinResource extends Resource
     {
         $query = parent::getEloquentQuery();
         $id = static::categoryId();
-        return $id ? $query->whereHas('categories', fn($q) => $q->where('categories.id', $id)) : $query;
+        // Only show products whose PRIMARY category matches this resource.
+        return $id ? $query->where('category_id', $id) : $query;
     }
 
     protected static function categoryId(): ?int

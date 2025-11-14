@@ -72,7 +72,7 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
                                     <ul>
                                         @forelse(($categories ?? []) as $cat)
                                             <li>
-                                                <a href="{{ route('category') }}">{{ $cat->name }} <i class="rt rt-arrow-right-long"></i></a>
+                                                <a href="{{ route('category', ['slug' => $cat->slug]) }}">{{ $cat->name }} <i class="rt rt-arrow-right-long"></i></a>
                                             </li>
                                         @empty
                                             <li><a href="#">No categories <i class="rt rt-arrow-right-long"></i></a></li>
@@ -158,9 +158,9 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
                         @php
                             $count = isset($category->products_count) ? $category->products_count : (method_exists($category, 'products') ? $category->products()->count() : 0);
                         @endphp
-                        <a href="{{ route('category') }}"><img class="img-fit-square" src="{{ $category->image_url }}" alt="collection-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/featured/img-1.jpg') }}';"></a>
+                        <a href="{{ route('category', ['slug' => $category->slug]) }}"><img class="img-fit-square" src="{{ $category->image_url }}" alt="collection-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/featured/img-1.jpg') }}';"></a>
                         <p class="item-quantity">{{ $count }} <span>items</span></p>
-                        <a href="{{ route('category') }}" class="item-catagory-box">
+                        <a href="{{ route('category', ['slug' => $category->slug]) }}" class="item-catagory-box">
                             <h3 class="title">{{ strtoupper($category->name) }}</h3>
                         </a>
                     </div>
@@ -188,12 +188,12 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
             @forelse(($weddingProducts ?? collect()) as $product)
                 <div class="col-xl-3 col-md-4 col-sm-6 col-12">
                     <div class="product-item element-item1">
-                        <a href="{{ route('productDetails') }}" class="product-image image-hover-variations">
+                        <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-image image-hover-variations">
                             <div class="image-vari1 image-vari"><img class="img-fit-product" src="{{ $product->image_url }}" alt="product-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/products/product-details.jpg') }}';"></div>
                             <div class="image-vari2 image-vari"><img class="img-fit-product" src="{{ $product->image_url }}" alt="product-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/products/product-details.jpg') }}';"></div>
                         </a>
                         <div class="bottom-content">
-                            <a href="{{ route('productDetails') }}" class="product-name">{{ $product->name }}</a>
+                            <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-name">{{ $product->name }}</a>
                             <div class="action-wrap">
                                 <span class="price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
                             </div>
@@ -279,12 +279,12 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
                 @forelse(($accessoryProducts ?? collect()) as $product)
                     <div class="col-xl-3 col-md-4 col-sm-6 col-12">
                         <div class="product-item element-item1">
-                            <a href="{{ route('productDetails') }}" class="product-image image-hover-variations">
+                            <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-image image-hover-variations">
                                 <div class="image-vari1 image-vari"><img class="img-fit-product" src="{{ $product->image_url }}" alt="product-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/products/product-details.jpg') }}';"></div>
                                 <div class="image-vari2 image-vari"><img class="img-fit-product" src="{{ $product->image_url }}" alt="product-image" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/products/product-details.jpg') }}';"></div>
                             </a>
                             <div class="bottom-content">
-                                <a href="{{ route('productDetails') }}" class="product-name">{{ $product->name }}</a>
+                                <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-name">{{ $product->name }}</a>
                                 <div class="action-wrap">
                                     <span class="price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
                                 </div>

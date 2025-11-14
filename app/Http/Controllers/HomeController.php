@@ -107,9 +107,72 @@ class HomeController extends Controller
     }
     
     
-    public function category()
+    public function category(Request $request)
     {
-        return view('home/category');
+        $slug = $request->query('slug');
+        if (!$slug) {
+            return view('home/category');
+        }
+
+        $category = Category::where('slug', $slug)->first();
+        if (!$category) {
+            abort(404);
+        }
+
+        // base query: products that belong to the current category
+        $query = Product::whereHas('categories', function ($q) use ($category) {
+            $q->where('categories.id', $category->id);
+        });
+
+        // Optional filter: co-category (products that also have another category)
+        $withSlug = $request->query('with');
+        $withCategory = null;
+        if ($withSlug) {
+            $withCategory = Category::where('slug', $withSlug)->first();
+            if ($withCategory && $withCategory->id !== $category->id) {
+                $query = $query->whereHas('categories', function ($q) use ($withCategory) {
+                    $q->where('categories.id', $withCategory->id);
+                });
+            }
+        }
+
+        // Sorting
+        $sort = $request->query('sort', 'latest');
+        switch ($sort) {
+            case 'price_asc':
+                $query = $query->orderBy('price', 'asc');
+                break;
+            case 'price_desc':
+                $query = $query->orderBy('price', 'desc');
+                break;
+            case 'name_asc':
+                $query = $query->orderBy('name', 'asc');
+                break;
+            case 'name_desc':
+                $query = $query->orderBy('name', 'desc');
+                break;
+            default: // 'latest' or unknown
+                $query = $query->latest();
+        }
+
+        $products = $query->paginate(12)->withQueryString();
+
+        // Build co-occurring categories list (other categories present in this base category's products)
+        $baseProductIds = Product::whereHas('categories', function ($q) use ($category) {
+            $q->where('categories.id', $category->id);
+        })->pluck('id');
+
+        $otherCategories = Category::whereHas('productsMany', function ($q) use ($baseProductIds) {
+            $q->whereIn('products.id', $baseProductIds);
+        })
+        ->where('categories.id', '!=', $category->id)
+        ->withCount(['productsMany as products_count' => function ($q) use ($baseProductIds) {
+            $q->whereIn('products.id', $baseProductIds);
+        }])
+        ->orderBy('name')
+        ->get();
+
+        return view('home/category', compact('category', 'products', 'otherCategories', 'withCategory', 'sort'));
     }
     
     

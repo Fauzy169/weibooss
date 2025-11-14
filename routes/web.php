@@ -67,7 +67,8 @@ Route::prefix('pages')->group(function () {
             Route::get('/check-out','checkOut')->name('checkOut');
             Route::get('/full-width-Shop','fullWidthShop')->name('fullWidthShop');
             Route::get('/grouped-products','groupedProducts')->name('groupedProducts');
-            Route::get('/product-details','productDetails')->name('productDetails');
+            // Dynamic product detail by slug (simplified URL). Slug optional to avoid demo links breaking.
+            Route::get('/product/{slug?}','productDetails')->name('productDetails');
             Route::get('/product-details2','productDetails2')->name('productDetails2');
             Route::get('/shop','shop')->name('shop');
             Route::get('/sidebar-left','sidebarLeft')->name('sidebarLeft');

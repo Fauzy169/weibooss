@@ -253,7 +253,7 @@
                         </li>
                         <li class="mega-dropdown-li">
                             <ul class="mega-dropdown-ul mm-show">
-                                <li class="dropdown-li"><a class="dropdown-link" href="{{ route('productDetails') }}">Single Product
+                                <li class="dropdown-li"><a class="dropdown-link" href="{{ route('shop') }}">Single Product
                                         Layout
                                         One</a>
                                 </li>
