@@ -86,16 +86,18 @@
                     <span class="product-price">Rp{{ number_format($product->price,0,',','.') }}</span>
                     <p>{{ $product->description }}</p>
                     <div class="product-bottom-action">
-                        <div class="cart-edit">
-                            <div class="quantity-edit action-item">
-                                <button class="button"><i class="fal fa-minus minus"></i></button>
-                                <input type="text" class="input" value="01" />
-                                <button class="button plus">+<i class="fal fa-plus plus"></i></button>
+                        <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST" class="d-flex align-items-center gap-2">
+                            @csrf
+                            <div class="cart-edit">
+                                <div class="quantity-edit action-item">
+                                    <button type="button" class="button" onclick="this.nextElementSibling.stepDown()"><i class="fal fa-minus minus"></i></button>
+                                    <input name="quantity" type="number" min="1" value="1" class="input" />
+                                    <button type="button" class="button plus" onclick="this.previousElementSibling.stepUp()">+<i class="fal fa-plus plus"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <a href="{{ route('cart') }}" class="addto-cart-btn action-item"><i class="rt-basket-shopping"></i> Add To
-                            Cart</a>
-                        <a href="{{ route('wishlist') }}" class="wishlist-btn action-item"><i class="rt-heart"></i></a>
+                            <button type="submit" class="addto-cart-btn action-item"><i class="rt-basket-shopping"></i> Add To Cart</button>
+                            <a href="{{ route('wishlist') }}" class="wishlist-btn action-item"><i class="rt-heart"></i></a>
+                        </form>
                     </div>
                     <div class="product-uniques">
                         <span class="catagorys product-unipue"><span>Categories: </span> {{ $product->categories->pluck('name')->join(', ') }}</span>

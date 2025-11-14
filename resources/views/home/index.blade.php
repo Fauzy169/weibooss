@@ -57,6 +57,32 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
     .promo-image-wrapper img { width:100%; height:100%; object-fit:cover; display:block; }
     /* Product card base */
     .product-item.element-item1 { position: relative; }
+
+        /* Center the decorative sub-content and add spacing */
+        .section-header .sub-content,
+        .rts-deal-section1 > .container > .sub-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 0 auto 28px; /* space before next section inner */
+            text-align: center;
+        }
+        .section-header .sub-content .line-1,
+        .section-header .sub-content .line-2,
+        .rts-deal-section1 > .container > .sub-content .line-1,
+        .rts-deal-section1 > .container > .sub-content .line-2 {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+            opacity: 0.85;
+        }
+        .section-header .sub-content .sub-text,
+        .rts-deal-section1 > .container > .sub-content .sub-text {
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
     </style>
 
     <!--================= Banner Section Start Here =================-->
@@ -212,6 +238,11 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
 <!-- ..::Deal Section Start Here::.. -->
 <div id="promo" class="rts-deal-section1">
     <div class="container">
+        <div class="sub-content">
+            <img class="line-1" src="{{ asset('assets/images/banner/wvbo-icon.png') }}" alt="">
+            <span class="sub-text">Featured</span>
+            <img class="line-2" src="{{ asset('assets/images/banner/wvbo-icon.png') }}" alt="">
+        </div>
         <div class="section-inner">
             <div class="row">
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 col-promo-img text-white">

@@ -65,6 +65,11 @@ Route::prefix('pages')->group(function () {
             Route::get('/account', 'account')->name('account');
             Route::get('/cart','cart')->name('cart');
             Route::get('/check-out','checkOut')->name('checkOut');
+            // Cart actions
+            Route::post('/cart/add/{slug}', 'addToCart')->name('cart.add');
+            Route::post('/cart/update', 'updateCart')->name('cart.update');
+            Route::post('/cart/remove/{id}', 'removeFromCart')->name('cart.remove');
+            Route::post('/checkout/place', 'placeOrder')->name('checkout.place');
             Route::get('/full-width-Shop','fullWidthShop')->name('fullWidthShop');
             Route::get('/grouped-products','groupedProducts')->name('groupedProducts');
             // Dynamic product detail by slug (simplified URL). Slug optional to avoid demo links breaking.

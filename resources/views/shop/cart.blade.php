@@ -17,99 +17,46 @@
             <div class="row justify-content-between">
                 <div class="col-xl-7">
                     <div class="cart-table-area">
-                        <table class="table table-bordered table-hover">
-                            <thead class="thead-dark">
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><div class="product-thumb"><img src="{{ asset('assets/images/products/inner/cart/1.jpg') }}" alt="product-thumb"></div></td>
-                                    <td>
-                                        <div class="product-title-area">
-                                            <span class="pretitle">Nighty</span>
-                                            <h4 class="product-title">Shimmer Sheer Tights</h4>
-                                        </div>
-                                    </td>
-                                    <td><span class="product-price">$69.00</span></td>
-                                    <td>
-                                        <div class="cart-edit">
-                                            <div class="quantity-edit">
-                                                <button class="button"><i class="fal fa-minus minus"></i></button>
-                                                <input type="text" class="input" value="3" />
-                                                <button class="button plus">+<i class="fal fa-plus plus"></i></button>
+                        @if(empty($items))
+                            <div class="py-5 text-center">Keranjang kosong. <a href="{{ route('shop') }}">Belanja sekarang</a>.</div>
+                        @else
+                        <form action="{{ route('cart.update') }}" method="POST">
+                            @csrf
+                            <table class="table table-bordered table-hover">
+                                <thead class="thead-dark">
+                                </thead>
+                                <tbody>
+                                @foreach($items as $item)
+                                    <tr>
+                                        <td><div class="product-thumb"><img src="{{ $item['image'] }}" alt="product-thumb" style="width:70px;height:70px;object-fit:cover"></div></td>
+                                        <td>
+                                            <div class="product-title-area">
+                                                <h4 class="product-title">{{ $item['name'] }}</h4>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="last-td"><button class="remove-btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="product-thumb"><img src="{{ asset('assets/images/products/inner/cart/2.jpg') }}" alt="product-thumb"></div></td>
-                                    <td>
-                                        <div class="product-title-area">
-                                            <span class="pretitle">Nighty</span>
-                                            <h4 class="product-title">Shimmer Sheer Tights</h4>
-                                        </div>
-                                    </td>
-                                    <td><span class="product-price">$69.00</span></td>
-                                    <td>
-                                        <div class="cart-edit">
-                                            <div class="quantity-edit">
-                                                <button class="button"><i class="fal fa-minus minus"></i></button>
-                                                <input type="text" class="input" value="3" />
-                                                <button class="button plus">+<i class="fal fa-plus plus"></i></button>
+                                        </td>
+                                        <td><span class="product-price">Rp{{ number_format($item['price'],0,',','.') }}</span></td>
+                                        <td>
+                                            <div class="cart-edit">
+                                                <div class="quantity-edit">
+                                                    <button type="button" class="button" onclick="this.nextElementSibling.stepDown()"><i class="fal fa-minus minus"></i></button>
+                                                    <input name="quantities[{{ $item['id'] }}]" type="number" min="1" class="input" value="{{ $item['qty'] }}" />
+                                                    <button type="button" class="button plus" onclick="this.previousElementSibling.stepUp()">+<i class="fal fa-plus plus"></i></button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </td>
-                                    <td class="last-td"><button class="remove-btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="product-thumb"><img src="{{ asset('assets/images/products/inner/cart/3.jpg') }}" alt="product-thumb"></div></td>
-                                    <td>
-                                        <div class="product-title-area">
-                                            <span class="pretitle">Nighty</span>
-                                            <h4 class="product-title">Shimmer Sheer Tights</h4>
-                                        </div>
-                                    </td>
-                                    <td><span class="product-price">$69.00</span></td>
-                                    <td>
-                                        <div class="cart-edit">
-                                            <div class="quantity-edit">
-                                                <button class="button"><i class="fal fa-minus minus"></i></button>
-                                                <input type="text" class="input" value="3" />
-                                                <button class="button plus">+<i class="fal fa-plus plus"></i></button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="last-td"><button class="remove-btn">Remove</button></td>
-                                </tr>
-                                <tr>
-                                    <td><div class="product-thumb"><img src="{{ asset('assets/images/products/inner/cart/4.jpg') }}" alt="product-thumb"></div></td>
-                                    <td>
-                                        <div class="product-title-area">
-                                            <span class="pretitle">Nighty</span>
-                                            <h4 class="product-title">Shimmer Sheer Tights</h4>
-                                        </div>
-                                    </td>
-                                    <td><span class="product-price">$69.00</span></td>
-                                    <td>
-                                        <div class="cart-edit">
-                                            <div class="quantity-edit">
-                                                <button class="button"><i class="fal fa-minus minus"></i></button>
-                                                <input type="text" class="input" value="3" />
-                                                <button class="button plus">+<i class="fal fa-plus plus"></i></button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="last-td"><button class="remove-btn">Remove</button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="coupon-apply">
-                            <span class="coupon-text">Coupon Code:</span>
-                            <div class="apply-input">
-                                <input type="text" placeholder="Apply coupon here">
-                                <button type="submit" class="apply-btn">Apply </i></button>
+                                        </td>
+                                        <td class="last-td">
+                                            <button formaction="{{ route('cart.remove', ['id'=>$item['id']]) }}" formmethod="POST" class="remove-btn">@csrf Remove</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                            <div class="d-flex justify-content-between">
+                                <a href="{{ route('shop') }}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
+                                <button type="submit" class="apply-btn">Update Cart</button>
                             </div>
-                        </div>
+                        </form>
+                        @endif
                     </div>
                 </div>
                 <div class="col-xl-4">
@@ -117,7 +64,7 @@
                         <div class="checkout-box-inner">
                             <div class="subtotal-area">
                                 <span class="title">Subtotal</span>
-                                <span class="subtotal-price">$364.00</span>
+                                <span class="subtotal-price">Rp{{ number_format($subtotal ?? 0,0,',','.') }}</span>
                             </div>
                             <div class="shipping-check">
                                 <span class="title">Shipping</span>
@@ -140,10 +87,13 @@
                             </div>
                             <div class="total-area">
                                 <span class="title">Total</span>
-                                <span class="total-price">$364.00</span>
+                                <span class="total-price">Rp{{ number_format($total ?? 0,0,',','.') }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('checkOut') }}" class="procced-btn">Procced To Checkout</a>
+                        <form action="{{ route('checkout.place') }}" method="POST" style="margin-top:12px;">
+                            @csrf
+                            <button type="submit" class="procced-btn">Place Order</button>
+                        </form>
                         <a href="{{ route('shop') }}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
                     </div>
                 </div>

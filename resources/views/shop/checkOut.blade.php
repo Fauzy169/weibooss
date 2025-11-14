@@ -91,34 +91,19 @@
                             <span class="action-title">Product</span>
                             <span class="subtotal">Subtotal</span>
                         </div>
+                        @foreach(($items ?? []) as $item)
                         <div class="category-item">
                             <div class="category-item-inner">
                                 <div class="category-title-area">
-                                    <span class="category-title">Preschool Flex Runner × 1</span>
+                                    <span class="category-title">{{ $item['name'] }} × {{ $item['qty'] }}</span>
                                 </div>
-                                <div class="price">$69.00</div>
+                                <div class="price">Rp{{ number_format($item['price'] * $item['qty'],0,',','.') }}</div>
                             </div>
                         </div>
-                        <div class="category-item">
-                            <div class="category-item-inner">
-                                <div class="category-title-area">
-                                    <span class="category-title">Hiking Boots × 1
-                                    </span>
-                                </div>
-                                <div class="price">$220.00</div>
-                            </div>
-                        </div>
-                        <div class="category-item">
-                            <div class="category-item-inner">
-                                <div class="category-title-area">
-                                    <span class="category-title">Tiktok Tshirt × 1</span>
-                                </div>
-                                <div class="price">$75.00</div>
-                            </div>
-                        </div>
+                        @endforeach
                         <div class="action-middle">
                             <span class="subtotal">Subtotal</span>
-                            <span class="total-price">$364.00</span>
+                            <span class="total-price">Rp{{ number_format($subtotal ?? 0,0,',','.') }}</span>
                         </div>
                         <div class="shipping-options checkout-options">
                             <span class="shipping">Shipping</span>
@@ -135,7 +120,7 @@
                         </div>
                         <div class="action-bottom">
                             <span class="total">Total</span>
-                            <span class="total-price">$364.00</span>
+                            <span class="total-price">Rp{{ number_format($total ?? 0,0,',','.') }}</span>
                         </div>
                     </div>
                     <div class="action-item m-0">
@@ -156,7 +141,10 @@
                             </form>
                         </div>
                     </div>
-                    <a href="{{ route('thankYou') }}" class="place-order-btn">Place Order</a>
+                    <form action="{{ route('checkout.place') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="place-order-btn">Place Order</button>
+                    </form>
                 </div>
             </div>
         </div>
