@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\BannerResource\Pages;
 use App\Models\Banner;
@@ -29,6 +30,13 @@ class BannerResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
     
     protected static ?int $navigationSort = 1;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'sales']);
+    }
 
     public static function form(Schema $schema): Schema
     {

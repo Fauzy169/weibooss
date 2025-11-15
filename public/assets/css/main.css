@@ -12123,6 +12123,7 @@ tr:first-child {
 .rts-deal-section1 {
   padding-top: 100px;
 }
+
 .container .section-inner {
   background-color: #EE403D;
   background-repeat: no-repeat;
@@ -12130,6 +12131,7 @@ tr:first-child {
   background-size: cover;
   border-radius: 10px;
 }
+
 .rts-deal-section1 .container .section-inner .single-inner {
   padding: 80px 0 80px 70px;
   position: relative;

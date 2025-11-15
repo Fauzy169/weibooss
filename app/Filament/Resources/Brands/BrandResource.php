@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Brands;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\Brands\Pages\CreateBrand;
 use App\Filament\Resources\Brands\Pages\EditBrand;
 use App\Filament\Resources\Brands\Pages\ListBrands;
@@ -21,6 +22,13 @@ class BrandResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Brand';
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'administrator']);
+    }
 
     public static function form(Schema $schema): Schema
     {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Warehouse;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Warehouse\InventoryItemResource\Pages;
 use App\Models\InventoryItem;
@@ -19,7 +20,6 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Service;
 
@@ -31,6 +31,13 @@ class InventoryItemResource extends Resource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Gudang;
     protected static ?int $navigationSort = 1;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'gudang']);
+    }
 
     public static function form(Schema $schema): Schema
     {

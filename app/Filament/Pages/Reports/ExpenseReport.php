@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Reports;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Models\Expense;
 use BackedEnum;
@@ -26,6 +27,13 @@ class ExpenseReport extends Page implements HasTable, HasForms
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Laporan;
     
     protected static ?int $navigationSort = 2;
+
+    public static function canAccess(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'owner']);
+    }
 
     public function getView(): string
     {
@@ -84,7 +92,7 @@ class ExpenseReport extends Page implements HasTable, HasForms
             ])
             ->filters([
                 \Filament\Tables\Filters\Filter::make('date_range')
-                    ->form([
+                    ->formSchema([
                         \Filament\Forms\Components\DatePicker::make('from')
                             ->label('Dari Tanggal')
                             ->native(false),

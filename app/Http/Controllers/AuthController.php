@@ -26,7 +26,7 @@ class AuthController extends Controller
             
             // Redirect based on user role
             $user = Auth::user();
-            if (in_array($user->role, ['administrator', 'owner', 'keuangan', 'gudang'])) {
+            if (in_array($user->role, ['super_admin', 'administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir'])) {
                 return redirect()->intended('/admin')->with('success', 'Selamat datang kembali, ' . $user->name . '!');
             }
             

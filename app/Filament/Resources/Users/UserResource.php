@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
@@ -29,6 +30,13 @@ class UserResource extends Resource
     protected static ?string $pluralModelLabel = 'Users';
 
     protected static ?int $navigationSort = 2;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'administrator']);
+    }
 
     public static function form(Schema $schema): Schema
     {

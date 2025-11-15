@@ -13,10 +13,12 @@ class Order extends Model
 
     protected $fillable = [
         'user_id', 'subtotal', 'total', 'status', 'placed_at', 'notes',
+        'payment_method', 'payment_proof', 'payment_notes', 'payment_confirmed_at', 'confirmed_by',
     ];
 
     protected $casts = [
         'placed_at' => 'datetime',
+        'payment_confirmed_at' => 'datetime',
         'subtotal' => 'decimal:2',
         'total' => 'decimal:2',
     ];
@@ -29,5 +31,10 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function confirmedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'confirmed_by');
     }
 }

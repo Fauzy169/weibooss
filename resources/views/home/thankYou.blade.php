@@ -7,6 +7,31 @@
     $script = '<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
 @endphp
 
+@push('styles')
+<style>
+    /* Override background color for thank you page only */
+    .thanks-area {
+        background-color: #f8f9fa !important;
+        background-image: none !important;
+    }
+    .thanks-area .section-inner {
+        background-color: #ffffff;
+        padding: 60px 40px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .thanks-area .section-icon {
+        background-color: #f0f9ff;
+        border-color: #99cc33 !important;
+    }
+    @media (max-width: 576px) {
+        .thanks-area .section-inner {
+            padding: 40px 20px;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
 
     <!--thanks-area start-->

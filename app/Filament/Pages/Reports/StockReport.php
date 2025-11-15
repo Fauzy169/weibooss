@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages\Reports;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Models\InventoryItem;
 use BackedEnum;
@@ -27,6 +28,13 @@ class StockReport extends Page implements HasTable, HasForms
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Laporan;
     
     protected static ?int $navigationSort = 3;
+
+    public static function canAccess(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'owner']);
+    }
 
     public function getView(): string
     {

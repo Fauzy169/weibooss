@@ -38,8 +38,20 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
+                // Role-specific dashboard widgets
+                \App\Filament\Widgets\SuperAdminDashboardWidget::class,
+                \App\Filament\Widgets\OwnerDashboardWidget::class,
+                \App\Filament\Widgets\AdminDashboardWidget::class,
+                \App\Filament\Widgets\SalesDashboardWidget::class,
+                \App\Filament\Widgets\KasirDashboardWidget::class,
+                \App\Filament\Widgets\KeuanganDashboardWidget::class,
+                \App\Filament\Widgets\GudangDashboardWidget::class,
+                // Additional widgets
+                \App\Filament\Widgets\RecentOrdersWidget::class,
+                \App\Filament\Widgets\SalesChartWidget::class,
+                \App\Filament\Widgets\LowStockAlertWidget::class,
+                // Default widgets
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

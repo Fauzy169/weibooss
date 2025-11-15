@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Finance;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Finance\ExpenseResource\Pages;
 use App\Models\Expense;
@@ -28,6 +29,13 @@ class ExpenseResource extends Resource
     protected static ?string $navigationLabel = 'Pengeluaran';
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Keuangan;
     protected static ?int $navigationSort = 2;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'keuangan']);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -166,7 +174,7 @@ class ExpenseResource extends Resource
                     ])
                     ->multiple(),
                 Filter::make('date')
-                    ->form([
+                    ->formSchema([
                         DatePicker::make('from')
                             ->label('Dari Tanggal')
                             ->native(false),

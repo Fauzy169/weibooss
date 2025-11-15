@@ -52,8 +52,9 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Administrator, owner, keuangan, and gudang can access Filament admin panel
-        return $this->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']);
+        // Customer tidak bisa akses admin panel
+        // Hanya staff dan admin yang bisa akses
+        return $this->hasAnyRole(['super_admin', 'administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir']);
     }
 
     // Helper methods for checking roles
@@ -97,6 +98,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->role === 'gudang';
     }
 
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
     public function hasRole(string $role): bool
     {
         return $this->role === $role;
@@ -105,5 +111,20 @@ class User extends Authenticatable implements FilamentUser
     public function hasAnyRole(array $roles): bool
     {
         return in_array($this->role, $roles);
+    }
+
+    public function getRoleNameAttribute(): string
+    {
+        return match($this->role) {
+            'super_admin' => 'Super Administrator',
+            'administrator' => 'Administrator',
+            'owner' => 'Owner',
+            'keuangan' => 'Keuangan',
+            'gudang' => 'Gudang',
+            'sales' => 'Sales',
+            'kasir' => 'Kasir',
+            'customer' => 'Customer',
+            default => ucfirst($this->role),
+        };
     }
 }

@@ -105,3 +105,8 @@ Route::prefix('pages')->group(function () {
             Route::get('/newsGrid','newsGrid')->name('newsGrid');
     });
 });
+
+// Filament order payment confirmation route
+Route::middleware(['auth'])->post('/admin/orders/{orderId}/confirm-payment', 
+    [\App\Http\Controllers\OrderPaymentController::class, 'confirmPayment']
+)->name('filament.admin.resources.orders.confirm-payment');

@@ -7,7 +7,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Select;
 use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\ViewField;
 use Illuminate\Support\Str;
 use Filament\Schemas\Schema;
 
@@ -29,9 +29,11 @@ class ProductForm
                 // Optional display of primary category info
                 ...($primaryCategoryName ? [
                     Section::make('Kategori')->schema([
-                        Placeholder::make('primary_category_info')
+                        ViewField::make('primary_category_info')
                             ->label('Kategori Utama')
-                            ->content($primaryCategoryName . ' (otomatis)')
+                            ->view('filament.forms.components.category-info', [
+                                'categoryName' => $primaryCategoryName
+                            ])
                             ->columnSpanFull(),
                     ])
                 ] : []),

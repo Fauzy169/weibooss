@@ -31,16 +31,27 @@ class UsersTable
                     ->label('Role')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'administrator' => 'danger',
-                        'owner' => 'warning',
-                        'sales' => 'info',
-                        'kasir' => 'success',
-                        'keuangan' => 'primary',
-                        'gudang' => 'gray',
-                        'customer' => 'secondary',
+                        'super_admin' => 'danger',
+                        'administrator' => 'warning',
+                        'owner' => 'info',
+                        'sales' => 'success',
+                        'kasir' => 'primary',
+                        'keuangan' => 'gray',
+                        'gudang' => 'secondary',
+                        'customer' => 'gray',
                         default => 'gray',
                     })
-                    ->formatStateUsing(fn (string $state): string => ucfirst($state))
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'super_admin' => 'Super Admin',
+                        'administrator' => 'Administrator',
+                        'owner' => 'Owner',
+                        'keuangan' => 'Keuangan',
+                        'gudang' => 'Gudang',
+                        'sales' => 'Sales',
+                        'kasir' => 'Kasir',
+                        'customer' => 'Customer',
+                        default => ucfirst($state),
+                    })
                     ->searchable()
                     ->sortable(),
                 
@@ -65,13 +76,14 @@ class UsersTable
                 SelectFilter::make('role')
                     ->label('Filter by Role')
                     ->options([
+                        'super_admin' => 'Super Admin',
                         'administrator' => 'Administrator',
-                        'customer' => 'Customer',
+                        'owner' => 'Owner',
+                        'keuangan' => 'Keuangan',
+                        'gudang' => 'Gudang',
                         'sales' => 'Sales',
                         'kasir' => 'Kasir',
-                        'keuangan' => 'Keuangan',
-                        'owner' => 'Owner',
-                        'gudang' => 'Gudang',
+                        'customer' => 'Customer',
                     ])
                     ->multiple(),
             ])

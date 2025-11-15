@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Aksesoris;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Tables\ProductsTable;
@@ -29,6 +30,13 @@ class AksesorisResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
 
     protected static ?int $navigationSort = 3;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'sales']);
+    }
 
     public static function form(Schema $schema): Schema
     {

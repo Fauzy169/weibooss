@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Services;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Services\Pages\CreateService;
 use App\Filament\Resources\Services\Pages\EditService;
@@ -26,6 +27,13 @@ class ServiceResource extends Resource
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
 
     protected static ?int $navigationSort = 5;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'sales']);
+    }
 
     public static function form(Schema $schema): Schema
     {

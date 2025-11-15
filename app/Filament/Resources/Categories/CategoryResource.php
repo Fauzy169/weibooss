@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Categories;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Resources\Categories\Pages\EditCategory;
 use App\Filament\Resources\Categories\Pages\ListCategories;
@@ -23,6 +24,13 @@ class CategoryResource extends Resource
     protected static ?string $recordTitleAttribute = 'Category';
 
     protected static ?int $navigationSort = 3;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'administrator']);
+    }
 
     public static function form(Schema $schema): Schema
     {

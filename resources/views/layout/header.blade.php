@@ -81,13 +81,14 @@
                                 <div class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; min-width: 200px; z-index: 999; margin-top: 10px;">
                                     <div style="padding: 16px; border-bottom: 1px solid #eee;">
                                         <div style="font-weight: 600; color: #333; margin-bottom: 4px;">{{ Auth::user()->name }}</div>
-                                        <div style="font-size: 13px; color: #999;">{{ Auth::user()->email }}</div>
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 2px;">{{ Auth::user()->role_name }}</div>
+                                        <div style="font-size: 12px; color: #999;">{{ Auth::user()->email }}</div>
                                     </div>
                                     <div style="padding: 8px 0;">
                                         <a href="{{ route('account') }}" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
                                             <i class="rt-user-2" style="margin-right: 8px;"></i> My Account
                                         </a>
-                                        @if(Auth::user()->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']))
+                                        @if(Auth::user()->hasAnyRole(['super_admin', 'administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir']))
                                         <a href="/admin" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
                                             <i class="fas fa-cog" style="margin-right: 8px;"></i> Admin Panel
                                         </a>
@@ -328,13 +329,14 @@
                     <div class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; min-width: 200px; z-index: 999; margin-top: 10px;">
                         <div style="padding: 16px; border-bottom: 1px solid #eee;">
                             <div style="font-weight: 600; color: #333; margin-bottom: 4px;">{{ Auth::user()->name }}</div>
-                            <div style="font-size: 13px; color: #999;">{{ Auth::user()->email }}</div>
+                            <div style="font-size: 12px; color: #666; margin-bottom: 2px;">{{ Auth::user()->role_name }}</div>
+                            <div style="font-size: 12px; color: #999;">{{ Auth::user()->email }}</div>
                         </div>
                         <div style="padding: 8px 0;">
                             <a href="{{ route('account') }}" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
                                 <i class="rt-user-2" style="margin-right: 8px;"></i> My Account
                             </a>
-                            @if(Auth::user()->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']))
+                            @if(Auth::user()->hasAnyRole(['super_admin', 'administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir']))
                             <a href="/admin" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
                                 <i class="fas fa-cog" style="margin-right: 8px;"></i> Admin Panel
                             </a>

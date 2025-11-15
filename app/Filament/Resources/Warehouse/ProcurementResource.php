@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Warehouse;
 
+use Illuminate\Support\Facades\Auth;
 use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Warehouse\ProcurementResource\Pages;
 use App\Models\InventoryItem;
@@ -11,7 +12,7 @@ use App\Models\StockMovement;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\ViewField;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
@@ -33,6 +34,13 @@ class ProcurementResource extends Resource
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-truck';
     protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Gudang;
     protected static ?int $navigationSort = 2;
+
+    public static function canViewAny(): bool
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        return $user && $user->hasAnyRole(['super_admin', 'gudang']);
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -179,30 +187,32 @@ class ProcurementResource extends Resource
             
             Section::make('Total')
                 ->schema([
-                    Placeholder::make('total_calculation')
+                    ViewField::make('total_calculation')
                         ->label('Total Pengadaan')
-                        ->content(function ($get, $record) {
-                            $items = $get('items') ?? [];
-                            $total = 0;
-                            
-                            if (is_array($items)) {
-                                foreach ($items as $item) {
-                                    if (isset($item['qty']) && isset($item['unit_cost'])) {
-                                        $qty = (int) $item['qty'];
-                                        $cost = (float) $item['unit_cost'];
-                                        $total += $qty * $cost;
+                        ->view('filament.forms.components.total-calculation', [
+                            'calculateTotal' => function ($get, $record) {
+                                $items = $get('items') ?? [];
+                                $total = 0;
+                                
+                                if (is_array($items)) {
+                                    foreach ($items as $item) {
+                                        if (isset($item['qty']) && isset($item['unit_cost'])) {
+                                            $qty = (int) $item['qty'];
+                                            $cost = (float) $item['unit_cost'];
+                                            $total += $qty * $cost;
+                                        }
                                     }
                                 }
+                                
+                                if ($total > 0) {
+                                    return 'Rp ' . number_format($total, 0, ',', '.');
+                                }
+                                
+                                return $record && $record->total_cost 
+                                    ? 'Rp ' . number_format($record->total_cost, 0, ',', '.') 
+                                    : 'Rp 0';
                             }
-                            
-                            if ($total > 0) {
-                                return 'Rp ' . number_format($total, 0, ',', '.');
-                            }
-                            
-                            return $record && $record->total_cost 
-                                ? 'Rp ' . number_format($record->total_cost, 0, ',', '.') 
-                                : 'Rp 0';
-                        })
+                        ])
                         ->columnSpanFull(),
                 ])->collapsible(),
         ]);

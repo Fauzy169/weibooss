@@ -22,7 +22,7 @@ class RedirectIfNotAuthenticated
 
         // Check if user has admin role
         $user = Auth::user();
-        if (!in_array($user->role, ['administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir'])) {
+        if (!in_array($user->role, ['super_admin', 'administrator', 'owner', 'keuangan', 'gudang', 'sales', 'kasir'])) {
             Auth::logout();
             return redirect()->route('login')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
         }

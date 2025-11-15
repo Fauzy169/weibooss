@@ -34,6 +34,7 @@ class ShopController extends Controller
             return redirect()->route('login');
         }
 
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         // Validate input
