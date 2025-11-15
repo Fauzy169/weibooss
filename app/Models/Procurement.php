@@ -27,6 +27,11 @@ class Procurement extends Model
         return $this->hasMany(ProcurementItem::class);
     }
 
+    public function expense(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
     public function recalcTotal(): void
     {
         $total = $this->items()->sum('subtotal');
