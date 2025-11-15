@@ -36,6 +36,8 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call([
+            SuperAdminSeeder::class,
+            UserRoleSeeder::class,
             BannerSeeder::class,
             CategorySeeder::class,
             ProductSeeder::class,

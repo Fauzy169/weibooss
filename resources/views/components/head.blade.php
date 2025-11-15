@@ -29,4 +29,6 @@
     <?php echo (isset($css) ? $css   : '')?>
     <!-- ..::Main Stylesheet::.. -->
     <link rel="stylesheet" type="text/css"  href="{{ asset('assets/css/main.css') }}">
+    <!-- ..::Product Fix - Uniform Sizes::.. -->
+    <link rel="stylesheet" type="text/css"  href="{{ asset('assets/css/product-fix.css') }}">
 </head>

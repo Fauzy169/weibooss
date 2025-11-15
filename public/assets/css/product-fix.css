@@ -1,0 +1,196 @@
+/* Fixed Product Image Sizes - Uniform Product Cards */
+
+/* Force all product images to have the same size and aspect ratio */
+.products-area .product-item .product-image,
+.products-area .product-item2 .product-image,
+.products-area3 .product-item .product-image,
+.products-area3 .product-item2 .product-image {
+    position: relative !important;
+    margin-bottom: 15px !important;
+    width: 100% !important;
+    height: 0 !important;
+    padding-bottom: 125% !important; /* 4:5 aspect ratio for better product display */
+    overflow: hidden !important;
+    background: #f8f8f8 !important;
+    border-radius: 8px !important;
+}
+
+.products-area .product-item .product-image img,
+.products-area .product-item2 .product-image img,
+.products-area3 .product-item .product-image img,
+.products-area3 .product-item2 .product-image img {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    transition: transform 0.3s ease !important;
+}
+
+.products-area .product-item:hover .product-image img,
+.products-area .product-item2:hover .product-image img,
+.products-area3 .product-item:hover .product-image img,
+.products-area3 .product-item2:hover .product-image img {
+    transform: scale(1.08) !important;
+}
+
+/* Ensure bottom content doesn't affect card height inconsistency */
+.products-area .product-item .bottom-content,
+.products-area .product-item2 .bottom-content,
+.products-area3 .product-item .bottom-content,
+.products-area3 .product-item2 .bottom-content {
+    padding: 15px 10px !important;
+}
+
+.products-area .product-item .product-name,
+.products-area .product-item2 .product-name,
+.products-area3 .product-item .product-name,
+.products-area3 .product-item2 .product-name {
+    display: block !important;
+    min-height: 52px !important;
+    line-height: 26px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    font-size: 14px !important;
+}
+
+.products-area .product-item .product-category,
+.products-area .product-item2 .product-category,
+.products-area3 .product-item .product-category,
+.products-area3 .product-item2 .product-category {
+    display: block !important;
+    font-size: 11px !important;
+    color: #999 !important;
+    margin-bottom: 5px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Ensure action wrap has consistent height */
+.products-area .product-item .action-wrap,
+.products-area .product-item2 .action-wrap,
+.products-area3 .product-item .action-wrap,
+.products-area3 .product-item2 .action-wrap {
+    margin-top: 10px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    min-height: 35px !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+.products-area .product-item .product-price,
+.products-area .product-item2 .product-price,
+.products-area3 .product-item .product-price,
+.products-area3 .product-item2 .product-price {
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    color: #040404 !important;
+    transform: none !important;
+    transition: none !important;
+}
+
+.products-area .product-item .addto-cart,
+.products-area .product-item2 .addto-cart,
+.products-area3 .product-item .addto-cart,
+.products-area3 .product-item2 .addto-cart {
+    transform: none !important;
+    transition: color 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+}
+
+/* Disable the hover translateY effect */
+.products-area .product-item:hover .action-wrap .product-price,
+.products-area .product-item2:hover .action-wrap .product-price,
+.products-area3 .product-item:hover .action-wrap .product-price,
+.products-area3 .product-item2:hover .action-wrap .product-price {
+    transform: none !important;
+}
+
+.products-area .product-item:hover .action-wrap .addto-cart,
+.products-area .product-item2:hover .action-wrap .addto-cart,
+.products-area3 .product-item:hover .action-wrap .addto-cart,
+.products-area3 .product-item2:hover .action-wrap .addto-cart {
+    transform: none !important;
+    color: var(--theme-color, #EE403D) !important;
+}
+
+/* Make all product cards same height */
+.products-area .product-item,
+.products-area .product-item2,
+.products-area3 .product-item,
+.products-area3 .product-item2 {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+    transition: box-shadow 0.3s ease !important;
+    overflow: hidden !important;
+}
+
+.products-area .product-item:hover,
+.products-area .product-item2:hover,
+.products-area3 .product-item:hover,
+.products-area3 .product-item2:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12) !important;
+}
+
+.products-area .product-item .bottom-content,
+.products-area .product-item2 .bottom-content,
+.products-area3 .product-item .bottom-content,
+.products-area3 .product-item2 .bottom-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+}
+
+/* Ensure grid columns are equal height */
+.products-area .row,
+.products-area3 .row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
+
+.products-area .row > [class*="col"],
+.products-area3 .row > [class*="col"] {
+    display: flex !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .products-area .product-item .product-image,
+    .products-area .product-item2 .product-image,
+    .products-area3 .product-item .product-image,
+    .products-area3 .product-item2 .product-image {
+        padding-bottom: 130% !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1199px) {
+    .products-area .product-item .product-image,
+    .products-area .product-item2 .product-image,
+    .products-area3 .product-item .product-image,
+    .products-area3 .product-item2 .product-image {
+        padding-bottom: 125% !important;
+    }
+}
+
+@media (min-width: 1200px) {
+    .products-area .product-item .product-image,
+    .products-area .product-item2 .product-image,
+    .products-area3 .product-item .product-image,
+    .products-area3 .product-item2 .product-image {
+        padding-bottom: 120% !important;
+    }
+}

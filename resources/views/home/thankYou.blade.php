@@ -1,9 +1,9 @@
 @extends('layout.layout')
 
 @php
-    $title='Thank You';
-    $subTitle = 'Home';
-    $subTitle2 = 'Thank You';
+    $title='Terima Kasih';
+    $subTitle = 'Beranda';
+    $subTitle2 = 'Terima Kasih';
     $script = '<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
 @endphp
 
@@ -42,14 +42,14 @@
                     <i class="fal fa-check"></i>
                 </div>
                 <div class="section-title">
-                    <h2 class="sub-title">Thanks For your Order</h2>
-                    <h3 class="sect-title">Sorry, we couldn't find the page you where looking for. We suggest that <br> you return to homepage.</h3>
+                    <h2 class="sub-title">Terima Kasih Atas Pesanan Anda</h2>
+                    <h3 class="sect-title">Pesanan Anda telah berhasil diterima dan sedang diproses. <br> Kami akan segera menghubungi Anda untuk konfirmasi lebih lanjut.</h3>
                 </div>
                 <div class="section-button">
-                    <a class="btn-1" href="{{ route('home') }}"><i class="fal fa-long-arrow-left"></i> Go To Homepage</a>
+                    <a class="btn-1" href="{{ route('home') }}"><i class="fal fa-long-arrow-left"></i> Kembali ke Beranda</a>
                     <h3>
-                        Let's track your order or
-                        <a class="btn-2" href="contact.php"> Contact Us</a>
+                        Lacak pesanan Anda atau
+                        <a class="btn-2" href="{{ route('home') }}"> Hubungi Kami</a>
                     </h3>
                 </div>
             </div>

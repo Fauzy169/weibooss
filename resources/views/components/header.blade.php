@@ -66,22 +66,6 @@
         <div class="container">
             <div class="navbar-part navbar-part1">
                 <div class="navbar-inner">
-                    <div class="left-side">
-                        <div class="hamburger-1">
-                            <a href="#" class="nav-menu-link">
-                                <span class="dot1"></span>
-                                <span class="dot2"></span>
-                                <span class="dot3"></span>
-                                <span class="dot4"></span>
-                                <span class="dot5"></span>
-                                <span class="dot6"></span>
-                                <span class="dot7"></span>
-                                <span class="dot8"></span>
-                                <span class="dot9"></span>
-                            </a>
-                        </div>
-                        <a href="{{ route('index') }}" class="logo"><img src="{{ asset('assets/images/logo1.svg') }}" alt="weiboo-logo"></a>
-                    </div>
                     <div class="rts-menu">
                         <nav class="menus menu-toggle">
                             <ul class="nav__menu">
@@ -206,17 +190,7 @@
                     </div>
                     <div class="responsive-hamburger">
                         <div class="hamburger-1">
-                            <a href="#" class="nav-menu-link">
-                                <span class="dot1"></span>
-                                <span class="dot2"></span>
-                                <span class="dot3"></span>
-                                <span class="dot4"></span>
-                                <span class="dot5"></span>
-                                <span class="dot6"></span>
-                                <span class="dot7"></span>
-                                <span class="dot8"></span>
-                                <span class="dot9"></span>
-                            </a>
+                            
                         </div>
                     </div>
                     <div class="header-action-items header-action-items1">

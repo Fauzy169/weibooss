@@ -349,10 +349,10 @@
         <!-- Left Side - Logo/Branding -->
         <div class="left-side">
             <div class="logo-container">
-                <h1>WEIBOO</h1>
+                <h1>StandFasha</h1>
                 <p class="tagline">Fashion Store</p>
             </div>
-            <i class="fas fa-shopping-bag decorative-icon"></i>
+            <img style="margin-top: 50px;" src="{{ asset('assets/images/standfasha.PNG') }}" alt="logo">
         </div>
 
         <!-- Right Side - Login Form -->

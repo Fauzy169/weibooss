@@ -240,7 +240,7 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
     <div class="container">
         <div class="sub-content">
             <img class="line-1" src="{{ asset('assets/images/banner/wvbo-icon.png') }}" alt="">
-            <span class="sub-text">Featured</span>
+            <span class="sub-text">Promo Terbatas</span>
             <img class="line-2" src="{{ asset('assets/images/banner/wvbo-icon.png') }}" alt="">
         </div>
         <div class="section-inner">

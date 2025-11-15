@@ -12,7 +12,6 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Form as SchemaForm;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -40,26 +39,66 @@ class BannerResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return $schema->schema([
-            SchemaForm::make()->schema([
-                TextInput::make('subtitle')->label('Badge/Sub Title')->maxLength(150),
-                TextInput::make('title')->required()->maxLength(255),
-                Textarea::make('description')->rows(4),
+        return $schema
+            ->components([
+                TextInput::make('subtitle')
+                    ->label('Badge/Sub Title')
+                    ->placeholder('Detail yang Menyempurnakan')
+                    ->maxLength(150)
+                    ->columnSpan(1),
+                
+                TextInput::make('title')
+                    ->label('Title')
+                    ->required()
+                    ->placeholder('Aksesoris Pelengkap Pernikahan')
+                    ->maxLength(255)
+                    ->columnSpan(1),
+                
+                Textarea::make('description')
+                    ->label('Description')
+                    ->placeholder('Mahkota, veil, dan perhiasan untuk melengkapi penampilan Anda.')
+                    ->rows(3)
+                    ->maxLength(500)
+                    ->columnSpanFull(),
 
                 FileUpload::make('image')
+                    ->label('Image')
                     ->image()
                     ->directory('banners')
                     ->disk('public')
                     ->imageEditor()
-                    ->imageCropAspectRatio('16:9'),
+                    ->imageCropAspectRatio('16:9')
+                    ->maxSize(2048)
+                    ->helperText('Ukuran optimal: 1920x1080px, Max: 2MB')
+                    ->columnSpanFull()
+                    ->required(),
 
-                TextInput::make('button_text')->maxLength(100),
-                TextInput::make('button_url')->url()->maxLength(255),
+                TextInput::make('button_text')
+                    ->label('Button text')
+                    ->placeholder('Belanja Aksesoris')
+                    ->maxLength(100)
+                    ->columnSpan(1),
+                
+                TextInput::make('button_url')
+                    ->label('Button url')
+                    ->placeholder('#aksesoris')
+                    ->maxLength(255)
+                    ->columnSpan(1),
 
-                TextInput::make('position')->default('home-hero')->maxLength(50),
-                Toggle::make('active')->default(true),
-            ])->columns(2),
-        ]);
+                TextInput::make('position')
+                    ->label('Position')
+                    ->default('home-hero')
+                    ->placeholder('home-hero')
+                    ->maxLength(50)
+                    ->columnSpan(1),
+                
+                Toggle::make('active')
+                    ->label('Active')
+                    ->default(true)
+                    ->inline(false)
+                    ->columnSpan(1),
+            ])
+            ->columns(2);
     }
 
     public static function table(Table $table): Table
