@@ -18,20 +18,20 @@ class HomeController extends Controller
         // Count products via many-to-many pivot so badges reflect all assignments
         $categories = Category::withCount(['productsMany as products_count'])->orderBy('name')->get();
 
-        // Section: Baju Pengantin → products under category "Baju Pengantin"
+        // Section: Baju Pengantin → products where primary category (category_id) is "Baju Pengantin"
         $bajuPengantinCategory = Category::where('slug', 'baju-pengantin')
             ->orWhere('name', 'Baju Pengantin')
             ->first();
         $weddingProducts = $bajuPengantinCategory
-            ? Product::whereHas('categories', fn($q) => $q->where('categories.id', $bajuPengantinCategory->id))->latest()->get()
+            ? Product::where('category_id', $bajuPengantinCategory->id)->latest()->get()
             : collect();
 
-        // Section: Aksesoris → products under category "Aksesoris"
+        // Section: Aksesoris → products where primary category (category_id) is "Aksesoris"
         $aksesorisCategory = Category::where('slug', 'aksesoris')
             ->orWhere('name', 'Aksesoris')
             ->first();
         $accessoryProducts = $aksesorisCategory
-            ? Product::whereHas('categories', fn($q) => $q->where('categories.id', $aksesorisCategory->id))->latest()->get()
+            ? Product::where('category_id', $aksesorisCategory->id)->latest()->get()
             : collect();
 
         // Services area: show active services (no featured flag needed)

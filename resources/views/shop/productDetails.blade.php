@@ -84,6 +84,11 @@
                     </div>
                     <h2 class="product-title">{{ $product->name }}</h2>
                     <span class="product-price">Rp{{ number_format($product->price,0,',','.') }}</span>
+                    
+                    <div class="product-uniques">
+                        
+                        <span class="catagorys product-unipue"><span>Categories: </span> {{ $product->categories->pluck('name')->join(', ') }}</span>
+                    <span class="catagorys product-unipue"><span>Deskripsi: </span></span>
                     <p>{{ $product->description }}</p>
                     <div class="product-bottom-action">
                         <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST" class="d-flex align-items-center gap-2">
@@ -96,149 +101,8 @@
                                 </div>
                             </div>
                             <button type="submit" class="addto-cart-btn action-item"><i class="rt-basket-shopping"></i> Add To Cart</button>
-                            <a href="{{ route('wishlist') }}" class="wishlist-btn action-item"><i class="rt-heart"></i></a>
                         </form>
                     </div>
-                    <div class="product-uniques">
-                        <span class="catagorys product-unipue"><span>Categories: </span> {{ $product->categories->pluck('name')->join(', ') }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="product-full-details-area">
-                <div class="details-filter-bar2">
-                    <button class="details-filter filter-btn active" data-show=".dls-one">Description</button>
-                </div>
-                <div class="full-details dls-one filterd-items">
-                    <div class="full-details-inner">
-                        <p class="mb--30">{{ $product->description }}</p>
-                    </div>
-                </div>
-                <div class="full-details dls-two filterd-items hide">
-                    <div class="full-details-inner">
-                        <p class="mb--30">In marketing a product is an object or system made available for consumer use
-                            it is anything that can be offered to a market to satisfy the desire or need of a customer.
-                            In retailing, products are
-                            merchandise, and in manufacturing, products are bought as raw materials and then sold as
-                            finished goods. A service is also regarded to as a type of product. Commodities are usually
-                            raw material
-                            and agricultural products, but a commodity can also be anything widely available in the open
-                            market. In project management, products are the formal definition of the project
-                            deliverables that
-                            to delivering the objectives of the project.</p>
-                        <p>A product can be classified as tangible or intangible. A tangible product is a physical
-                            object that can be perceived by touch such as a building, vehicle, gadget, or clothing. An
-                            intangible product is
-                            can only be perceived indirectly such as an insurance policy. Services can be broadly
-                            classified under intangible products which can be durable or non durable. A product line is
-                            "a group of
-                            closely related, either because they function in a similar manner.</p>
-                    </div>
-                </div>
-                <div class="full-details dls-three filterd-items hide">
-                    <div class="full-details-inner">
-                        <p>Belum ada ulasan.</p>
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12 mr-10">
-                                <div class="reveiw-form">
-                                    <h2 class="section-title">
-                                        Jadilah yang pertama mereview <strong>"{{ $product->name }}"</strong></h2>
-                                        <h4 class="sect-title">Your email address will not be published. Required fields are marked* </h4>
-                                        <div class="reveiw-form-main mb-10">
-                                            <div class="contact-form">
-                                                <div class="row">
-                                                    <div class="col-lg-6 col-sm-12">
-                                                        <div class="input-box text-input mb-20">
-                                                            <textarea name="Message" id="validationDefault01"  cols="30" rows="10"
-                                                                placeholder="Your Review*" required></textarea>
-                                                        <div class="row">
-                                                            @foreach($relatedProducts as $rel)
-                                                                <div class="col-xl-3 col-md-4 col-sm-6 col-12">
-                                                                    <div class="product-item element-item1">
-                                                                        <a href="{{ route('productDetails', ['slug' => $rel->slug]) }}" class="product-image image-hover-variations">
-                                                                            <div class="image-vari1 image-vari"><img src="{{ $rel->image_url }}" alt="{{ $rel->name }}"></div>
-                                                                        </a>
-                                                                        <div class="bottom-content">
-                                                                            <div class="star-rating">
-                                                                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-                                                                            </div>
-                                                                            <a href="{{ route('productDetails', ['slug' => $rel->slug]) }}" class="product-name">{{ $rel->name }}</a>
-                                                                            <div class="action-wrap">
-                                                                                <span class="price">Rp{{ number_format($rel->price,0,',','.') }}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                            @if($relatedProducts->isEmpty())
-                                                                <div class="col-12"><div class="text-center py-4">Tidak ada produk terkait.</div></div>
-                                                            @endif
-                                                        </div>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-name">Maidenform Bra</a>
-                                <div class="action-wrap">
-                                    <span class="price">$31.00</span>
-                                </div>
-                            </div>
-                            <div class="quick-action-button">
-                                <div class="cta-single cta-plus">
-                                    <a href="#"><i class="rt-plus"></i></a>
-                                </div>
-                                <div class="cta-single cta-quickview">
-                                    <a href="#"><i class="far fa-eye"></i></a>
-                                </div>
-                                <div class="cta-single cta-wishlist">
-                                    <a href="#"><i class="far fa-heart"></i></a>
-                                </div>
-                                <div class="cta-single cta-addtocart">
-                                    <a href="#"><i class="rt-basket-shopping"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-4 col-sm-6 col-12">
-                        <div class="product-item element-item1">
-                            <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-image image-hover-variations">
-                                <div class="image-vari1 image-vari"><img
-                                        src="{{ asset('assets/images/hand-picked/slider-img12.webp') }}" alt="product-image">
-                                </div>
-                                <div class="image-vari2 image-vari"><img
-                                        src="{{ asset('assets/images/hand-picked/slider-img12-3.webp') }}" alt="product-image">
-                                </div>
-                            </a>
-                            <div class="bottom-content">
-                                <div class="star-rating">
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                                <a href="{{ route('productDetails', ['slug' => $product->slug]) }}" class="product-name">Hanes Women's Bra</a>
-                                <div class="action-wrap">
-                                    <span class="price">$31.00</span>
-                                </div>
-                            </div>
-                            <div class="quick-action-button">
-                                <div class="cta-single cta-plus">
-                                    <a href="#"><i class="rt-plus"></i></a>
-                                </div>
-                                <div class="cta-single cta-quickview">
-                                    <a href="#"><i class="far fa-eye"></i></a>
-                                </div>
-                                <div class="cta-single cta-wishlist">
-                                    <a href="#"><i class="far fa-heart"></i></a>
-                                </div>
-                                <div class="cta-single cta-addtocart">
-                                    <a href="#"><i class="rt-basket-shopping"></i></a>
-                                </div>
-                            </div>
-                            <div class="product-features">
-                                <div class="discount-tag product-tag">-38%</div>
-                                <div class="new-tag product-tag">HOT</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

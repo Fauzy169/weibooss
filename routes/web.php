@@ -67,6 +67,7 @@ Route::prefix('pages')->group(function () {
             Route::get('/check-out','checkOut')->name('checkOut');
             // Cart actions
             Route::post('/cart/add/{slug}', 'addToCart')->name('cart.add');
+            Route::post('/cart/service/add/{slug}', 'addServiceToCart')->name('cart.service.add');
             Route::post('/cart/update', 'updateCart')->name('cart.update');
             Route::post('/cart/remove/{id}', 'removeFromCart')->name('cart.remove');
             Route::post('/checkout/place', 'placeOrder')->name('checkout.place');
@@ -80,6 +81,8 @@ Route::prefix('pages')->group(function () {
             Route::get('/sidebar-right','sidebarRight')->name('sidebarRight');
             Route::get('/variable-products','variableProducts')->name('variableProducts');
             Route::get('/grouped-products','groupedProducts')->name('groupedProducts');
+            // Service detail page
+            Route::get('/service/{slug}','serviceDetails')->name('serviceDetails');
         });
     });
 

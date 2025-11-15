@@ -97,6 +97,42 @@ class ShopController extends Controller
         return view('shop/groupedProducts');
     }
 
+    public function serviceDetails(string $slug)
+    {
+        $service = \App\Models\Service::where('slug', $slug)->firstOrFail();
+        return view('shop/serviceDetails', compact('service'));
+    }
+
+    public function addServiceToCart(Request $request, string $slug)
+    {
+        $service = \App\Models\Service::where('slug', $slug)->firstOrFail();
+        $qty = max(1, (int) $request->input('quantity', 1));
+        $cart = session('cart', []);
+        
+        // Use 'service_' prefix to differentiate from products
+        $cartKey = 'service_' . $service->id;
+        
+        if (isset($cart[$cartKey])) {
+            $cart[$cartKey]['qty'] += $qty;
+        } else {
+            $cart[$cartKey] = [
+                'id' => $service->id,
+                'slug' => $service->slug,
+                'name' => $service->name,
+                'price' => $service->price,
+                'image' => $service->image_url,
+                'qty' => $qty,
+                'type' => 'service', // Mark as service
+            ];
+        }
+        session(['cart' => $cart]);
+
+        if ($request->expectsJson()) {
+            return $this->cartJson();
+        }
+        return redirect()->route('cart')->with('success', 'Layanan ditambahkan ke keranjang');
+    }
+
     // Cart handlers
     public function addToCart(Request $request, string $slug)
     {
@@ -142,7 +178,7 @@ class ShopController extends Controller
         return back()->with('success', 'Keranjang diperbarui');
     }
 
-    public function removeFromCart(Request $request, int $id)
+    public function removeFromCart(Request $request, string $id)
     {
         $cart = session('cart', []);
         unset($cart[$id]);

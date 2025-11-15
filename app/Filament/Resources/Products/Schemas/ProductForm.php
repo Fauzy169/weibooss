@@ -48,8 +48,8 @@ class ProductForm
                     ->multiple()
                     ->searchable()
                     ->preload()
-                    ->required()
-                    ->helperText($primaryCategoryId ? 'Pilih kategori tambahan yang terkait. Kategori utama diset otomatis.' : null),
+                    ->required($primaryCategoryId === null) // Only required when no primary category (i.e., not related categories)
+                    ->helperText($primaryCategoryId ? 'Pilih kategori tambahan yang terkait (opsional). Kategori utama diset otomatis.' : null),
                 TextInput::make('name')
                     ->required()
                     ->live(onBlur: true)

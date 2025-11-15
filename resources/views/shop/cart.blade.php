@@ -26,33 +26,47 @@
                                 <thead class="thead-dark">
                                 </thead>
                                 <tbody>
-                                @foreach($items as $item)
+                                @foreach($items as $key => $item)
                                     <tr>
                                         <td><div class="product-thumb"><img src="{{ $item['image'] }}" alt="product-thumb" style="width:70px;height:70px;object-fit:cover"></div></td>
                                         <td>
                                             <div class="product-title-area">
                                                 <h4 class="product-title">{{ $item['name'] }}</h4>
+                                                @if(isset($item['type']) && $item['type'] === 'service')
+                                                    <span class="badge bg-info text-white" style="font-size: 11px; padding: 3px 8px;">Service/Jasa</span>
+                                                @endif
                                             </div>
                                         </td>
                                         <td><span class="product-price">Rp{{ number_format($item['price'],0,',','.') }}</span></td>
                                         <td>
-                                            <div class="cart-edit">
-                                                <div class="quantity-edit">
-                                                    <button type="button" class="button" onclick="this.nextElementSibling.stepDown()"><i class="fal fa-minus minus"></i></button>
-                                                    <input name="quantities[{{ $item['id'] }}]" type="number" min="1" class="input" value="{{ $item['qty'] }}" />
-                                                    <button type="button" class="button plus" onclick="this.previousElementSibling.stepUp()">+<i class="fal fa-plus plus"></i></button>
+                                            @if(isset($item['type']) && $item['type'] === 'service')
+                                                {{-- Service quantity is always 1 and cannot be changed --}}
+                                                <div class="cart-edit">
+                                                    <div class="quantity-edit" style="justify-content: center;">
+                                                        <input name="quantities[{{ $key }}]" type="hidden" value="1" />
+                                                        <span class="badge bg-secondary" style="padding: 8px 16px; font-size: 14px;">Qty: 1</span>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                {{-- Regular product with editable quantity --}}
+                                                <div class="cart-edit">
+                                                    <div class="quantity-edit">
+                                                        <button type="button" class="button" onclick="this.nextElementSibling.stepDown()"><i class="fal fa-minus minus"></i></button>
+                                                        <input name="quantities[{{ $key }}]" type="number" min="1" class="input" value="{{ $item['qty'] }}" />
+                                                        <button type="button" class="button plus" onclick="this.previousElementSibling.stepUp()">+<i class="fal fa-plus plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="last-td">
-                                            <button formaction="{{ route('cart.remove', ['id'=>$item['id']]) }}" formmethod="POST" class="remove-btn">@csrf Remove</button>
+                                            <button formaction="{{ route('cart.remove', ['id'=>$key]) }}" formmethod="POST" class="remove-btn">@csrf Remove</button>
                                         </td>
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
                             <div class="d-flex justify-content-between">
-                                <a href="{{ route('shop') }}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
+                                <a href="{{ route('home') }}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
                                 <button type="submit" class="apply-btn">Update Cart</button>
                             </div>
                         </form>
@@ -94,7 +108,6 @@
                             @csrf
                             <button type="submit" class="procced-btn">Place Order</button>
                         </form>
-                        <a href="{{ route('shop') }}" class="continue-shopping"><i class="fal fa-long-arrow-left"></i> Continue Shopping</a>
                     </div>
                 </div>
             </div>

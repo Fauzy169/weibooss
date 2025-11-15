@@ -346,35 +346,45 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
                     <h2 class="title">Salon atau Service</h2>
                 </div>
             </div>
-            <div class="row">
-                @forelse($featuredServices->take(3) as $service)
-                    <div class="col-xl-4 col-md-6 col-sm-12">
-                        <div class="full-wrapper wrapper-1">
-                            <div class="image-part">
-                                <a href="#" class="image"><img src="{{ $service->image_url }}" alt="{{ $service->name }}" loading="lazy" onerror="this.onerror=null;this.src='{{ asset('assets/images/featured/img-3.jpg') }}';"></a>
-                            </div>
-                            <div class="blog-content">
-                                <ul class="blog-meta">
-                                    <li><a href="#">{{ strtoupper($service->type) }}</a></li>
-                                </ul>
-                                <div class="title">
-                                    <a href="#">{{ $service->name }}</a>
-                                </div>
-                                @if(!is_null($service->price))
-                                    <div class="author-info d-flex align-items-center">
-                                        <div class="info">
-                                            <p class="author-name">Harga</p>
-                                            <p class="author-dsg">Rp{{ number_format($service->price, 0, ',', '.') }}</p>
-                                        </div>
+            
+            @if($featuredServices->count() > 0)
+                <div class="swiper servicesSlider" style="padding: 20px 0;">
+                    <div class="swiper-wrapper">
+                        @foreach($featuredServices as $service)
+                            <div class="swiper-slide">
+                                <div class="full-wrapper wrapper-1">
+                                    <div class="image-part" style="overflow: hidden; border-radius: 12px; height: 350px;">
+                                        <a href="{{ route('serviceDetails', ['slug' => $service->slug]) }}" class="image" style="display: block; width: 100%; height: 100%;">
+                                            <img src="{{ $service->image_url }}" alt="{{ $service->name }}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; display: block;" onerror="this.onerror=null;this.src='{{ asset('assets/images/featured/img-3.jpg') }}';">
+                                        </a>
                                     </div>
-                                @endif
+                                    <div class="blog-content" style="padding: 20px 0;">
+                                        <ul class="blog-meta">
+                                            <li><a href="{{ route('serviceDetails', ['slug' => $service->slug]) }}">{{ strtoupper($service->type) }}</a></li>
+                                        </ul>
+                                        <div class="title">
+                                            <a href="{{ route('serviceDetails', ['slug' => $service->slug]) }}">{{ $service->name }}</a>
+                                        </div>
+                                        @if(!is_null($service->price))
+                                            <div class="author-info d-flex align-items-center">
+                                                <div class="info">
+                                                    <p class="author-name">Harga</p>
+                                                    <p class="author-dsg">Rp{{ number_format($service->price, 0, ',', '.') }}</p>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-                @empty
+                    <div class="swiper-pagination service-pagination" style="position: static; margin-top: 20px;"></div>
+                </div>
+            @else
+                <div class="row">
                     <div class="col-12"><p class="text-center">Belum ada layanan unggulan.</p></div>
-                @endforelse
-            </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>
@@ -534,6 +544,39 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
         }
         update();
         var timer = setInterval(update, 1000);
+    });
+
+    // Services Slider
+    var servicesSlider = new Swiper('.servicesSlider', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.service-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.service-slider-btn.next',
+            prevEl: '.service-slider-btn.prev',
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+            },
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 30,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+        }
     });
 </script>
 @endpush
