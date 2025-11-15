@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\BajuPengantin;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Tables\ProductsTable;
 use App\Filament\Resources\BajuPengantin\Pages\CreateBajuPengantin;
@@ -24,6 +25,10 @@ class BajuPengantinResource extends Resource
     protected static ?string $navigationLabel = 'Baju Pengantin';
 
     protected static ?string $modelLabel = 'Baju Pengantin';
+
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
+
+    protected static ?int $navigationSort = 4;
 
     public static function form(Schema $schema): Schema
     {

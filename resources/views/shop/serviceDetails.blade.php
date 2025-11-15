@@ -96,6 +96,7 @@
                             </div>
 
                             <div class="product-bottom-action mt-4">
+                                @auth
                                 <form action="{{ route('cart.service.add', ['slug' => $service->slug]) }}" method="POST" class="d-flex align-items-center gap-3 flex-wrap">
                                     @csrf
                                     <input name="quantity" type="hidden" value="1" />
@@ -108,6 +109,21 @@
                                         Kembali ke Home
                                     </a>
                                 </form>
+                                @else
+                                <div class="d-flex align-items-center gap-3 flex-wrap">
+                                    <div class="alert alert-info mb-0" style="flex: 1; font-size: 14px;">
+                                        <i class="fas fa-info-circle"></i> Silakan login terlebih dahulu untuk menambahkan layanan ke keranjang
+                                    </div>
+                                    <a href="{{ route('login') }}" class="slider-btn2" style="background: #d51243; color: #fff; padding: 14px 32px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; transition: all 0.3s; font-size: 15px;">
+                                        <i class="fas fa-sign-in-alt"></i>
+                                        Login untuk Pesan
+                                    </a>
+                                    <a href="{{ route('home') }}" class="slider-btn2" style="background: #333; color: #fff; padding: 14px 32px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-weight: 600; transition: all 0.3s; font-size: 15px;">
+                                        <i class="fa-regular fa-arrow-left"></i>
+                                        Kembali ke Home
+                                    </a>
+                                </div>
+                                @endauth
                             </div>
                         </div>
                     </div>

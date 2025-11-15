@@ -9,12 +9,112 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class ShopController extends Controller
 {
     public function account()
     {
-        return view('shop/account');
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please login to access your account.');
+        }
+        
+        // Get user's orders
+        $orders = Order::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('shop/account', compact('orders'));
+    }
+    
+    public function updateAccount(Request $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $user = Auth::user();
+
+        // Validate input
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string',
+            'current_password' => 'nullable|required_with:new_password',
+            'new_password' => 'nullable|min:8|confirmed',
+        ], [
+            'name.required' => 'Name is required',
+            'email.required' => 'Email is required',
+            'email.email' => 'Invalid email format',
+            'email.unique' => 'Email already taken',
+            'current_password.required_with' => 'Current password is required to set new password',
+            'new_password.min' => 'New password must be at least 8 characters',
+            'new_password.confirmed' => 'Password confirmation does not match',
+        ]);
+
+        // Update basic info
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->phone = $validated['phone'];
+        $user->address = $validated['address'];
+
+        // Handle password change
+        if ($request->filled('current_password')) {
+            if (!Hash::check($request->current_password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'current_password' => 'Current password is incorrect',
+                ]);
+            }
+            
+            if ($request->filled('new_password')) {
+                $user->password = Hash::make($request->new_password);
+            }
+        }
+
+        $user->save();
+
+        return redirect()->route('account')->with('success', 'Account updated successfully!');
+    }
+    
+    public function getOrderDetails($id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+        }
+
+        $order = Order::with(['items.product'])->where('id', $id)->where('user_id', Auth::id())->first();
+
+        if (!$order) {
+            return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+        }
+
+        $orderData = [
+            'id' => $order->id,
+            'date' => $order->created_at->format('F d, Y H:i'),
+            'status' => $order->status,
+            'total' => $order->total,
+            'notes' => $order->notes,
+            'items' => $order->items->map(function($item) {
+                // Get product image from relationship or use stored name
+                $productImage = null;
+                if ($item->product) {
+                    $productImage = $item->product->image_url;
+                }
+                
+                return [
+                    'product_name' => $item->name,
+                    'product_image' => $productImage,
+                    'product_type' => strpos($item->name, 'Service') !== false ? 'service' : 'product',
+                    'price' => $item->price,
+                    'quantity' => $item->qty,
+                    'subtotal' => $item->subtotal,
+                ];
+            })
+        ];
+
+        return response()->json(['success' => true, 'order' => $orderData]);
     }
     
     public function cart()

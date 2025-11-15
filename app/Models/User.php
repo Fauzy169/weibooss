@@ -22,6 +22,9 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'role',
+        'phone',
+        'address',
     ];
 
     /**
@@ -49,7 +52,58 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Allow all authenticated users for now; customize as needed
-        return true;
+        // Administrator, owner, keuangan, and gudang can access Filament admin panel
+        return $this->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']);
+    }
+
+    // Helper methods for checking roles
+    public function isAdministrator(): bool
+    {
+        return $this->role === 'administrator';
+    }
+    
+    public function isAdmin(): bool
+    {
+        return $this->role === 'administrator';
+    }
+
+    public function isCustomer(): bool
+    {
+        return $this->role === 'customer';
+    }
+
+    public function isSales(): bool
+    {
+        return $this->role === 'sales';
+    }
+
+    public function isKasir(): bool
+    {
+        return $this->role === 'kasir';
+    }
+
+    public function isKeuangan(): bool
+    {
+        return $this->role === 'keuangan';
+    }
+
+    public function isOwner(): bool
+    {
+        return $this->role === 'owner';
+    }
+
+    public function isGudang(): bool
+    {
+        return $this->role === 'gudang';
+    }
+
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
     }
 }

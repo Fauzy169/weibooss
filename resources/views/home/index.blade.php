@@ -198,7 +198,7 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
 <!-- ..::New Collection Section End Here::.. -->
 
 <!-- ..::Hand Picked Section Start Here::.. -->
-<div id="produk-rekomendasi" class="rts-hand-picked-products-section">
+<div id="baju-pengantin" class="rts-hand-picked-products-section">
     <div class="container">
         <div class="section-header section-header3 text-center">
             <div class="wrapper">
@@ -333,7 +333,7 @@ $script='<script src="' . asset('assets/js/vendors/zoom.js') . '"></script>';
 <!-- ..::Accessories Section End Here::.. -->
 
 <!-- ..::Featured Product Section Start Here::.. -->
-<div class="rts-featured-product-section3">
+<div id="service" class="rts-featured-product-section3">
     <div class="container">
         <div class="rts-featured-product-section-inner">
             <div class="section-header section-header3 text-center">

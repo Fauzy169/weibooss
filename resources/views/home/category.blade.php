@@ -63,9 +63,19 @@
                                                 </div>
                                                 <div class="action-wrap">
                                                     <span class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
-                                                    <a href="#" class="addto-cart"><i class="fal fa-shopping-cart"></i>
-                                                        Add To
-                                                        Cart</a>
+                                                    @auth
+                                                    <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        <input type="hidden" name="quantity" value="1" />
+                                                        <button type="submit" class="addto-cart" style="background: none; border: none; cursor: pointer; padding: 0;">
+                                                            <i class="fal fa-shopping-cart"></i> Add To Cart
+                                                        </button>
+                                                    </form>
+                                                    @else
+                                                    <a href="{{ route('login') }}" class="addto-cart" title="Login untuk menambahkan ke keranjang">
+                                                        <i class="fas fa-sign-in-alt"></i> Login
+                                                    </a>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </div>

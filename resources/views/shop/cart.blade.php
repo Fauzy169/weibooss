@@ -77,31 +77,28 @@
                     <div class="checkout-box">
                         <div class="checkout-box-inner">
                             <div class="subtotal-area">
+                                <span class="title">Daftar Item</span>
+                            </div>
+                            <div class="cart-items-list" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;">
+                                @if(!empty($items))
+                                    @foreach($items as $item)
+                                        <div class="cart-item-summary" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee;">
+                                            <div style="flex: 1;">
+                                                <div style="font-weight: 600; font-size: 14px; margin-bottom: 3px;">{{ $item['name'] }}</div>
+                                                <div style="font-size: 12px; color: #666;">
+                                                    Qty: {{ $item['qty'] }} × Rp{{ number_format($item['price'], 0, ',', '.') }}
+                                                </div>
+                                            </div>
+                                            <div style="font-weight: 700; color: #d51243; white-space: nowrap; padding-left: 15px;">
+                                                Rp{{ number_format($item['price'] * $item['qty'], 0, ',', '.') }}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="subtotal-area" style="">
                                 <span class="title">Subtotal</span>
                                 <span class="subtotal-price">Rp{{ number_format($subtotal ?? 0,0,',','.') }}</span>
-                            </div>
-                            <div class="shipping-check">
-                                <span class="title">Shipping</span>
-                                <div class="check-options">
-                                    <form>
-                                          <div class="form-group">
-                                            <input type="checkbox" id="fltrt">
-                                            <label class="check-title" for="fltrt">Flat rate</label>
-                                          </div>
-                                          <div class="form-group">
-                                            <input type="checkbox" id="frsh">
-                                            <label class="check-title" for="frsh">Free shipping</label>
-                                          </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="shipping-location">
-                                <span class="shipping-to">Shipping to <span>NY.</span></span>
-                                <span class="change-address"><i class="fal fa-map-marker-alt mr--5"></i>Change address</span>
-                            </div>
-                            <div class="total-area">
-                                <span class="title">Total</span>
-                                <span class="total-price">Rp{{ number_format($total ?? 0,0,',','.') }}</span>
                             </div>
                         </div>
                         <form action="{{ route('checkout.place') }}" method="POST" style="margin-top:12px;">
@@ -113,6 +110,4 @@
             </div>
         </div>
     </div>
-    <!-- ..::Cart Section End Here::.. -->
-
 @endsection

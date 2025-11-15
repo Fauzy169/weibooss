@@ -21,7 +21,7 @@
                     <h3 class="sect-title">Sorry, we couldn't find the page you where looking for. We suggest that <br> you return to homepage.</h3>
                 </div>
                 <div class="section-button">
-                    <a class="btn-1" href="index.php"><i class="fal fa-long-arrow-left"></i> Go To Homepage</a>
+                    <a class="btn-1" href="{{ route('home') }}"><i class="fal fa-long-arrow-left"></i> Go To Homepage</a>
                     <h3>
                         Let's track your order or
                         <a class="btn-2" href="contact.php"> Contact Us</a>

@@ -24,22 +24,21 @@
                             <ul class="nav__menu">
                                 <li class="has-dropdown"><a class="menu-item" href="#">Category <i class="rt-plus"></i></a>
                                     <ul class="dropdown-ul">
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('category') }}">All Categories</a>
+                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('category') }}">All Categories</a></li>
+                                        @php
+                                            $headerCategories = \App\Models\Category::orderBy('name')->get();
+                                        @endphp
+                                        @foreach($headerCategories as $cat)
+                                        <li class="dropdown-li">
+                                            <a class="dropdown-link" href="{{ route('index') }}#{{ $cat->slug }}">{{ $cat->name }}</a>
                                         </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('shop') }}">Women's</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('shop') }}">Men's</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('shop') }}">Kids</a>
-                                        </li>
-                                        <li class="dropdown-li"><a class="dropdown-link" href="{{ route('shop') }}">Accessories</a>
-                                        </li>
+                                        @endforeach
                                     </ul>
                                 </li>
-                                <li><a class="menu-item" href="#produk-rekomendasi">Baju Pengantin</a></li>
-                                <li><a class="menu-item" href="#promo">Promo</a></li>
-                                <li><a class="menu-item" href="#aksesoris">Aksesoris</a></li>
-                                <li><a class="menu-item" href="{{ route('contact') }}">Contact</a></li>
+                                <li><a class="menu-item" href="{{ route('index') }}#baju-pengantin">Baju Pengantin</a></li>
+                                <li><a class="menu-item" href="{{ route('index') }}#promo">Promo</a></li>
+                                <li><a class="menu-item" href="{{ route('index') }}#aksesoris">Aksesoris</a></li>
+                                <li><a class="menu-item" href="{{ route('index') }}#service">Service</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -72,7 +71,43 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        @auth
+                        <div class="user-dropdown action-item">
+                            <div class="user-nav">
+                                <div class="user-icon icon" style="cursor: pointer;">
+                                    <i class="rt-user-2"></i>
+                                </div>
+                                <div class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; min-width: 200px; z-index: 999; margin-top: 10px;">
+                                    <div style="padding: 16px; border-bottom: 1px solid #eee;">
+                                        <div style="font-weight: 600; color: #333; margin-bottom: 4px;">{{ Auth::user()->name }}</div>
+                                        <div style="font-size: 13px; color: #999;">{{ Auth::user()->email }}</div>
+                                    </div>
+                                    <div style="padding: 8px 0;">
+                                        <a href="{{ route('account') }}" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
+                                            <i class="rt-user-2" style="margin-right: 8px;"></i> My Account
+                                        </a>
+                                        @if(Auth::user()->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']))
+                                        <a href="/admin" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
+                                            <i class="fas fa-cog" style="margin-right: 8px;"></i> Admin Panel
+                                        </a>
+                                        @endif
+                                    </div>
+                                    <div style="border-top: 1px solid #eee; padding: 8px 0;">
+                                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                                            @csrf
+                                            <button type="submit" style="display: block; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; color: #d51243; cursor: pointer; transition: background 0.2s; font-size: 14px;">
+                                                <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Logout
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @else
                         <a href="{{ route('login') }}" class="account"><i class="rt-user-2"></i></a>
+                        @endauth
+                        
                         @php($__cart = session('cart', []))
                         @php($__cartQty = collect($__cart)->sum('qty'))
                         @php($__cartSubtotal = collect($__cart)->sum(fn($i) => $i['price'] * $i['qty']))
@@ -283,7 +318,42 @@
                 <div class="favourite-icon icon"><i class="rt-heart"></i><span class="cart-dot icon-dot">0</span>
                 </div>
             </div>
+            
+            @auth
+            <div class="user-dropdown action-item">
+                <div class="user-nav">
+                    <div class="user-icon icon" style="cursor: pointer;">
+                        <i class="rt-user-2"></i>
+                    </div>
+                    <div class="user-dropdown-menu" style="display: none; position: absolute; top: 100%; right: 0; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; min-width: 200px; z-index: 999; margin-top: 10px;">
+                        <div style="padding: 16px; border-bottom: 1px solid #eee;">
+                            <div style="font-weight: 600; color: #333; margin-bottom: 4px;">{{ Auth::user()->name }}</div>
+                            <div style="font-size: 13px; color: #999;">{{ Auth::user()->email }}</div>
+                        </div>
+                        <div style="padding: 8px 0;">
+                            <a href="{{ route('account') }}" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
+                                <i class="rt-user-2" style="margin-right: 8px;"></i> My Account
+                            </a>
+                            @if(Auth::user()->hasAnyRole(['administrator', 'owner', 'keuangan', 'gudang']))
+                            <a href="/admin" style="display: block; padding: 10px 16px; color: #666; text-decoration: none; transition: background 0.2s;">
+                                <i class="fas fa-cog" style="margin-right: 8px;"></i> Admin Panel
+                            </a>
+                            @endif
+                        </div>
+                        <div style="border-top: 1px solid #eee; padding: 8px 0;">
+                            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                                @csrf
+                                <button type="submit" style="display: block; width: 100%; text-align: left; padding: 10px 16px; background: none; border: none; color: #d51243; cursor: pointer; transition: background 0.2s; font-size: 14px;">
+                                    <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @else
             <a href="{{ route('login') }}" class="account"><i class="rt-user-2"></i></a>
+            @endauth
         </div>
         <!-- side-mobile-menu end -->
     </aside>
@@ -391,5 +461,55 @@
         }
     });
 })();
+</script>
+
+<style>
+.user-dropdown {
+    position: relative;
+}
+
+.user-dropdown .user-nav {
+    position: relative;
+}
+
+.user-dropdown-menu a:hover,
+.user-dropdown-menu button:hover {
+    background-color: #f8f9fa !important;
+}
+</style>
+
+<script>
+// User dropdown toggle
+document.addEventListener('DOMContentLoaded', function() {
+    const userDropdowns = document.querySelectorAll('.user-dropdown');
+    
+    userDropdowns.forEach(function(dropdown) {
+        const userIcon = dropdown.querySelector('.user-icon');
+        const userMenu = dropdown.querySelector('.user-dropdown-menu');
+        
+        if (userIcon && userMenu) {
+            userIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Close all other dropdowns first
+                document.querySelectorAll('.user-dropdown-menu').forEach(function(menu) {
+                    if (menu !== userMenu) {
+                        menu.style.display = 'none';
+                    }
+                });
+                // Toggle current dropdown
+                userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
+            });
+        }
+    });
+    
+    // Close all dropdowns when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.user-dropdown')) {
+            document.querySelectorAll('.user-dropdown-menu').forEach(function(menu) {
+                menu.style.display = 'none';
+            });
+        }
+    });
+});
 </script>
 @endpush

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Promotions;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Promotions\Pages\CreatePromotion;
 use App\Filament\Resources\Promotions\Pages\EditPromotion;
 use App\Filament\Resources\Promotions\Pages\ListPromotions;
@@ -21,6 +22,10 @@ class PromotionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Promotion';
+
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

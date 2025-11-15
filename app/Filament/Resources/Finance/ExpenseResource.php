@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Finance;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Finance\ExpenseResource\Pages;
 use App\Models\Expense;
 use Filament\Forms;
@@ -25,8 +26,8 @@ class ExpenseResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Pengeluaran';
-    protected static string|\UnitEnum|null $navigationGroup = 'Keuangan';
-    protected static ?int $navigationSort = 1;
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Keuangan;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Aksesoris;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Products\Schemas\ProductForm;
 use App\Filament\Resources\Products\Tables\ProductsTable;
 use App\Filament\Resources\Aksesoris\Pages\CreateAksesoris;
@@ -24,6 +25,10 @@ class AksesorisResource extends Resource
     protected static ?string $navigationLabel = 'Aksesoris';
 
     protected static ?string $modelLabel = 'Aksesoris';
+
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {

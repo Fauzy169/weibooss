@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\BannerResource\Pages;
 use App\Models\Banner;
 use Filament\Forms;
@@ -24,7 +25,10 @@ class BannerResource extends Resource
     protected static ?string $model = Banner::class;
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-photo';
-    protected static string|\UnitEnum|null $navigationGroup = 'Content';
+    
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::SalesContent;
+    
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

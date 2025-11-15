@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Finance;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Finance\IncomeResource\Pages;
 use App\Models\Order;
 use Filament\Actions\Action;
@@ -20,14 +21,15 @@ class IncomeResource extends Resource
 
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-banknotes';
     protected static ?string $navigationLabel = 'Pemasukan';
-    protected static string|\UnitEnum|null $navigationGroup = 'Keuangan';
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Keuangan;
+    protected static ?int $navigationSort = 1;
 
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
                 TextColumn::make('id')->label('#')->sortable(),
-                TextColumn::make('placed_at')->dateTime('Y-m-d H:i')->label('Tanggal')->sortable(),
+                TextColumn::make('user.name')->label('User')->sortable()->searchable(),
                 TextColumn::make('status')
                     ->badge()
                     ->formatStateUsing(fn (string $state): string => match ($state) {
@@ -43,9 +45,8 @@ class IncomeResource extends Resource
                         default => 'warning',
                     })
                     ->label('Status'),
-                TextColumn::make('subtotal')->money('IDR')->label('Subtotal')->sortable(),
+                TextColumn::make('placed_at')->dateTime('Y-m-d H:i')->label('Tanggal')->sortable(),
                 TextColumn::make('total')->money('IDR')->label('Total')->sortable(),
-                TextColumn::make('user.name')->label('User')->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')->since()->label('Diubah'),
             ])
             ->recordActions([

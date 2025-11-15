@@ -91,6 +91,7 @@
                     <span class="catagorys product-unipue"><span>Deskripsi: </span></span>
                     <p>{{ $product->description }}</p>
                     <div class="product-bottom-action">
+                        @auth
                         <form action="{{ route('cart.add', ['slug' => $product->slug]) }}" method="POST" class="d-flex align-items-center gap-2">
                             @csrf
                             <div class="cart-edit">
@@ -102,6 +103,16 @@
                             </div>
                             <button type="submit" class="addto-cart-btn action-item"><i class="rt-basket-shopping"></i> Add To Cart</button>
                         </form>
+                        @else
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="alert alert-info mb-0" style="flex: 1;">
+                                <i class="fas fa-info-circle"></i> Silakan login terlebih dahulu untuk menambahkan produk ke keranjang
+                            </div>
+                            <a href="{{ route('login') }}" class="addto-cart-btn action-item">
+                                <i class="fas fa-sign-in-alt"></i> Login untuk Belanja
+                            </a>
+                        </div>
+                        @endauth
                     </div>
                     </div>
                 </div>

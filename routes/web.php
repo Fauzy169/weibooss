@@ -18,6 +18,10 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.perform');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Registration routes
+Route::get('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [\App\Http\Controllers\Auth\RegisterController::class, 'register'])->name('register.perform');
+
 // Legacy backoffice routes (kept while migrating to Filament). Path changed to avoid conflict with Filament '/admin'.
 Route::middleware('auth')->prefix('backoffice')->name('admin.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -62,15 +66,21 @@ Route::prefix('pages')->group(function () {
     // shop
     Route::prefix('shop')->group(function () {
         Route::controller(ShopController::class)->group(function () {
-            Route::get('/account', 'account')->name('account');
-            Route::get('/cart','cart')->name('cart');
-            Route::get('/check-out','checkOut')->name('checkOut');
-            // Cart actions
-            Route::post('/cart/add/{slug}', 'addToCart')->name('cart.add');
-            Route::post('/cart/service/add/{slug}', 'addServiceToCart')->name('cart.service.add');
-            Route::post('/cart/update', 'updateCart')->name('cart.update');
-            Route::post('/cart/remove/{id}', 'removeFromCart')->name('cart.remove');
-            Route::post('/checkout/place', 'placeOrder')->name('checkout.place');
+            Route::get('/account', 'account')->name('account')->middleware('auth');
+            Route::put('/account/update', 'updateAccount')->name('account.update')->middleware('auth');
+            Route::get('/order/{id}', 'getOrderDetails')->name('order.details')->middleware('auth');
+            
+            // Cart and checkout - require authentication
+            Route::middleware('auth')->group(function () {
+                Route::get('/cart','cart')->name('cart');
+                Route::get('/check-out','checkOut')->name('checkOut');
+                // Cart actions
+                Route::post('/cart/add/{slug}', 'addToCart')->name('cart.add');
+                Route::post('/cart/service/add/{slug}', 'addServiceToCart')->name('cart.service.add');
+                Route::post('/cart/update', 'updateCart')->name('cart.update');
+                Route::post('/cart/remove/{id}', 'removeFromCart')->name('cart.remove');
+                Route::post('/checkout/place', 'placeOrder')->name('checkout.place');
+            });
             Route::get('/full-width-Shop','fullWidthShop')->name('fullWidthShop');
             Route::get('/grouped-products','groupedProducts')->name('groupedProducts');
             // Dynamic product detail by slug (simplified URL). Slug optional to avoid demo links breaking.

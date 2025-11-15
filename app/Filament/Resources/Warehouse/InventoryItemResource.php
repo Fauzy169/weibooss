@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Warehouse;
 
+use App\Filament\Navigation\NavigationGroup;
 use App\Filament\Resources\Warehouse\InventoryItemResource\Pages;
 use App\Models\InventoryItem;
 use App\Models\StockMovement;
@@ -28,7 +29,8 @@ class InventoryItemResource extends Resource
 
     protected static ?string $navigationLabel = 'Stok & Bahan';
     protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-archive-box';
-    protected static string|\UnitEnum|null $navigationGroup = 'Gudang';
+    protected static \UnitEnum|string|null $navigationGroup = NavigationGroup::Gudang;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
